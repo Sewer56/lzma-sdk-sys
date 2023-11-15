@@ -1,0 +1,39 @@
+[package]
+name = "lzma-sdk-sys"
+version = "0.1.0"
+edition = "2021"
+authors = [
+    "Sewer56 <admin@sewer56.dev>",
+    # Based on work by, Julia DeMille <me@jdemille.com> , but rewritten since
+]
+license = "MIT"
+description = "Raw FFI bindings for the LZMA encoder/decoder parts of LZMA-SDK (7zip)"
+repository = "https://github.com/Sewer56/lzma-sdk-sys.git"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[features]
+default = ["external-codecs"]  # Multithreaded by default
+
+# Threading
+st = []  # Single-threaded
+
+# Compression features
+large-pages = []  # Enable large pages support
+long-paths = []  # Enable long path support
+external-codecs = [] # Enable external codec support for 7z archive format
+
+# For debugging builds
+debug-build = []
+
+[dependencies]
+libc = "0.2"
+
+[build-dependencies]
+bindgen = "0.71.1"
+cc = "1.0"
+glob = "0.3"
+regex = "1.11"
+
+# [profile.dev.build-override]
+# debug = true
