@@ -1,13 +1,15 @@
-#![feature(core_intrinsics)]
-
-use core::time::Duration;
-use std::{collections::HashMap, env, fs, path::{Path, PathBuf}, process::Command, thread::sleep};
+use std::{collections::HashMap, env, fs, path::{Path, PathBuf}, process::Command};
 #[allow(deprecated)] // doing the suggestion
 use bindgen::CargoCallbacks;
 use regex::Regex;
 
+#[cfg(feature = "debug-build-script")]
+use core::time::Duration;
+#[cfg(feature = "debug-build-script")]
+use std::thread::sleep;
 
 #[derive(Clone)]
+#[allow(dead_code)]
 struct Define {
     value: Option<String>,
     comment: String,
@@ -190,16 +192,41 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
     defines
 }
 
+/// Extracts source file paths from C/C++ include directives in a wrapper file.
+///
+/// This function scans a given wrapper file for `#include` directives that reference
+/// files in the "7z/C/" directory and builds a list of corresponding source files:
+/// 
+/// - For `.h` includes: looks for matching `.c` implementation files
+/// - For `.c` includes: adds them directly to the source list
+/// 
+/// All paths are verified to exist before being included in the result.
+///
+/// # Arguments
+/// * `wrapper_path` - Path to the wrapper file to analyze
+///
+/// # Returns
+/// * `Result<Vec<String>>` - A vector of existing source file paths on success
+///                          or an error if file reading or regex compilation fails
 fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
     let content = fs::read_to_string(wrapper_path)?;
-    let include_re = Regex::new(r#"#include\s+"7z/C/([^"]+)\.h""#)?;
+    let include_re = Regex::new(r#"#include\s+"7z/C/([^"]+)\.(h|c)""#)?;
     let mut sources = Vec::new();
     
     for cap in include_re.captures_iter(&content) {
-        let header = cap.get(1).unwrap().as_str();
-        let source = format!("7z/C/{}.c", header);
-        if Path::new(&source).exists() {
-            sources.push(source);
+        let file_name = cap.get(1).unwrap().as_str();
+        let extension = cap.get(2).unwrap().as_str();
+        
+        if extension == "c" {
+            let source = format!("7z/C/{}.c", file_name);
+            if Path::new(&source).exists() {
+                sources.push(source);
+            }
+        } else { // extension == "h"
+            let source = format!("7z/C/{}.c", file_name);
+            if Path::new(&source).exists() {
+                sources.push(source);
+            }
         }
     }
     
@@ -221,9 +248,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Windows devs may need a different solution, but this works for Linux & macOS
     // Also uncomment [profile.dev.build-override] in Cargo.toml
 
-    // let url = format!("vscode://vadimcn.vscode-lldb/launch/config?{{'request':'attach','pid':{}}}", std::process::id());
-    // Command::new("code").arg("--open-url").arg(url).output().unwrap();
-    // sleep(Duration::from_secs(1)); // Wait for debugger to attach
+    #[cfg(feature = "debug-build-script")] {
+      let url = format!("vscode://vadimcn.vscode-lldb/launch/config?{{'request':'attach','pid':{}}}", std::process::id());
+      Command::new("code").arg("--open-url").arg(url).output().unwrap();
+      sleep(Duration::from_secs(1)); // Wait for debugger to attach
+    }
+
 
     let mut build = cc::Build::new();
     prefer_clang(&mut build);
@@ -287,7 +317,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     bindings.write_to_file(out_path.join("bindings.rs"))?;
 
     // Print build configuration
-    #[cfg(feature = "debug-build")]
+    #[cfg(feature = "debug-build-logs")]
     {
         println!("cargo:warning=7-Zip Build Configuration:");
         println!("cargo:warning=========================");

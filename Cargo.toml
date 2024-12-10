@@ -13,7 +13,7 @@ repository = "https://github.com/Sewer56/lzma-sdk-sys.git"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = ["external-codecs"]  # Multithreaded by default
+default = ["external-codecs", "enable-asm"]  # Multithreaded by default
 
 # Threading
 st = []  # Single-threaded
@@ -24,7 +24,11 @@ long-paths = []  # Enable long path support
 external-codecs = [] # Enable external codec support for 7z archive format
 
 # For debugging builds
-debug-build = []
+debug-build-logs = []
+debug-build-script = []
+
+# Enable Optimized Hand Rolled Assembly Routines
+enable-asm = []
 
 [dependencies]
 libc = "0.2"
