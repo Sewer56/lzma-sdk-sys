@@ -40,13 +40,14 @@ mod tests {
     use std::ptr;
 
     #[test]
-    fn test_lzma_encode() {
+    fn test_lzma_round_trip() {
         let input = b"Hello LZMA compression!";
         let mut props = [0u8; LZMA_PROPS_SIZE as usize];
         let mut props_size = LZMA_PROPS_SIZE as SizeT;
         
-        let mut output = vec![0u8; input.len() * 2];
-        let mut output_size = output.len() as SizeT;
+        // Encode
+        let mut compressed = vec![0u8; input.len() * 2];
+        let mut compressed_size = compressed.len() as SizeT;
         
         let alloc = Allocator::default();
         
@@ -61,8 +62,8 @@ mod tests {
             assert_eq!(res, SZ_OK as i32);
 
             let res = LzmaEncode(
-                output.as_mut_ptr() as *mut Byte,
-                &mut output_size,
+                compressed.as_mut_ptr() as *mut Byte,
+                &mut compressed_size,
                 input.as_ptr() as *const Byte,
                 input.len() as SizeT,
                 &enc_props,
@@ -76,6 +77,33 @@ mod tests {
             assert_eq!(res, SZ_OK as i32);
             
             LzmaEnc_Destroy(enc, alloc.as_ref(), alloc.as_ref());
+
+            // Trim compressed buffer to actual size
+            compressed.truncate(compressed_size as usize);
+
+            // Decode
+            // The LZMA format requires the decompressed size for decoding
+            let mut dest = vec![0u8; input.len()];
+            let mut dest_size = dest.capacity() as SizeT;
+            let mut source_len: SizeT = compressed.len();
+            let mut status: ELzmaStatus = ELzmaStatus::LZMA_STATUS_NOT_SPECIFIED;
+
+            let res = LzmaDecode(
+                dest.as_mut_ptr() as *mut Byte,
+                &mut dest_size,
+                compressed.as_ptr() as *const Byte,
+                &mut source_len,
+                props.as_ptr() as *const Byte,
+                props_size as u32,
+                ELzmaFinishMode::LZMA_FINISH_END,
+                &mut status,
+                alloc.as_ref(),
+            );
+            assert_eq!(res, SZ_OK as i32);
+
+            // Verify the round-trip
+            assert_eq!(dest_size as usize, input.len());
+            assert_eq!(&dest[..dest_size as usize], input);
         }
     }
 }
