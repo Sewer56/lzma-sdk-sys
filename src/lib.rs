@@ -1,6 +1,13 @@
+#![doc = include_str!("../README.md")]
+#![cfg_attr(not(test), no_std)]
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
+
+use core::ffi::c_void;
+
+extern crate alloc;
+extern crate core;
 
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
@@ -26,11 +33,11 @@ impl Allocator {
     }
 }
 
-unsafe extern "C" fn sz_alloc(_p: ISzAllocPtr, size: usize) -> *mut ::std::os::raw::c_void {
+unsafe extern "C" fn sz_alloc(_p: ISzAllocPtr, size: usize) -> *mut c_void {
     libc::malloc(size)
 }
 
-unsafe extern "C" fn sz_free(_p: ISzAllocPtr, address: *mut ::std::os::raw::c_void) {
+unsafe extern "C" fn sz_free(_p: ISzAllocPtr, address: *mut c_void) {
     libc::free(address)
 }
 

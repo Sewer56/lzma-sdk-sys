@@ -266,6 +266,35 @@ fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box
             }
         }
     }
+
+    /*
+        TODO: Replace compilation units with assembly files
+        when enable-asm feature is used.
+
+        ifdef USE_X86_ASM
+        $O/7zCrcOpt.o: ../../../Asm/x86/7zCrcOpt.asm
+            $(MY_ASM) $(AFLAGS) $<
+        $O/XzCrc64Opt.o: ../../../Asm/x86/XzCrc64Opt.asm
+            $(MY_ASM) $(AFLAGS) $<
+        $O/AesOpt.o: ../../../Asm/x86/AesOpt.asm
+            $(MY_ASM) $(AFLAGS) $<
+        $O/Sha1Opt.o: ../../../Asm/x86/Sha1Opt.asm
+            $(MY_ASM) $(AFLAGS) $<
+        $O/Sha256Opt.o: ../../../Asm/x86/Sha256Opt.asm
+            $(MY_ASM) $(AFLAGS) $<
+        else
+        $O/7zCrcOpt.o: ../../7zCrcOpt.c
+            $(CC) $(CFLAGS) $<
+        $O/XzCrc64Opt.o: ../../XzCrc64Opt.c
+            $(CC) $(CFLAGS) $<
+        $O/Sha1Opt.o: ../../Sha1Opt.c
+            $(CC) $(CFLAGS) $<
+        $O/Sha256Opt.o: ../../Sha256Opt.c
+            $(CC) $(CFLAGS) $<
+        $O/AesOpt.o: ../../AesOpt.c
+            $(CC) $(CFLAGS) $<
+        endif
+    */
     
     Ok(sources)
 }
@@ -376,6 +405,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .explicit_padding(true)
         .wrap_unsafe_ops(true)
         .wrap_static_fns(true)
+        .use_core()
         .parse_callbacks(Box::new(CargoCallbacks::new()))
         .default_enum_style(bindgen::EnumVariation::Rust {
             non_exhaustive: false,

@@ -6,6 +6,8 @@ authors = ["Sewer56 <admin@sewer56.dev>"]
 license = "MIT"
 description = "Raw FFI bindings for the LZMA encoder/decoder parts of LZMA-SDK (7zip)"
 repository = "https://github.com/Sewer56/lzma-sdk-sys.git"
+readme = "README.MD"
+license-file = "LICENSE"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
