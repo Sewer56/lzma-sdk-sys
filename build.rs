@@ -138,9 +138,11 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
     let is_x86 = info.is_x86;
     let is_arm64 = info.is_arm64;
     let is_macos = info.is_macos;
-    
+
+    // Those prefixed with MAKEFILE are the makefile variables.
+    // Not used in compilation, but used to keep accuracy with upstream when verifying.
     if info.is_clang {
-        defines.insert("USE_CLANG", Define {
+        defines.insert("MAKEFILE_USE_CLANG", Define {
             value: Some("1".to_owned()),
             comment: "Whether current compiler is Clang".into(),
             default: true,
@@ -148,40 +150,75 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
         });
     }
 
-    if is_x64 || is_x86 || is_arm64 {
+    if (is_x64 || is_x86 || is_arm64) && env::var("CARGO_FEATURE_ENABLE_ASM").is_ok() {
         // All x86/x64/arm64 except Apple x64 
         if !(is_macos && is_x64) {
-            defines.insert("USE_ASM", Define {
+            defines.insert("MAKEFILE_USE_ASM", Define {
                 value: Some("1".to_owned()),
                 comment: "Enable assembly optimizations".into(),
                 default: true,
                 category: "Performance",
             });
+
+            /*
+                // Original Makefile.
+
+                ifdef USE_LZMA_DEC_ASM
+                    ifdef IS_X64
+                        $O/LzmaDecOpt.o: ../../../Asm/x86/LzmaDecOpt.asm
+                            $(MY_ASM) $(AFLAGS) $<
+                    endif
+
+                    ifdef IS_ARM64
+                        $O/LzmaDecOpt.o: ../../../Asm/arm64/LzmaDecOpt.S ../../../Asm/arm64/7zAsm.S
+                            $(CC) $(CFLAGS) $(ASM_FLAGS) $<
+                    endif
+
+                    $O/LzmaDec.o: ../../LzmaDec.c
+                        $(CC) $(CFLAGS) -DZ7_LZMA_DEC_OPT $<
+                else
+
+                $O/LzmaDec.o: ../../LzmaDec.c
+                    $(CC) $(CFLAGS) $<
+
+                endif
+            */
+
+            if is_x64 || is_arm64 {
+                defines.insert("Z7_LZMA_DEC_OPT", Define {
+                    value: Some("1".to_owned()),
+                    comment: "Enable assembly optimizations".into(),
+                    default: true,
+                    category: "Performance",
+                });
+                // Rust Note: We link `LzmaDec.c` via the header `LzmaDec.h` in `wrapper.h`
+                // So we need to set this define if enabling the feature.
+            }
         } 
     }
 
     if is_x64 {
-        defines.insert("IS_X64", Define {
+        defines.insert("MAKEFILE_IS_X64", Define {
             value: Some("1".to_owned()),
             comment: "x64 platform".into(),
             default: true,
             category: "Architecture",
         });
     } else if is_x86 {
-        defines.insert("IS_X86", Define {
+        defines.insert("MAKEFILE_IS_X86", Define {
             value: Some("1".to_owned()),
             comment: "x86 platform".into(),
             default: true,
             category: "Architecture",
         });
     } else if is_arm64 {
-        defines.insert("IS_ARM64", Define {
+        defines.insert("MAKEFILE_IS_ARM64", Define {
             value: Some("1".to_owned()),
             comment: "ARM64 platform".into(),
             default: true,
             category: "Architecture",
         });
-        defines.insert("ASM_FLAGS", Define {
+        defines.insert("MAKEFILE_ASM_FLAGS", Define {
             value: Some("-Wno-unused-macros".to_owned()),
             comment: "Flags related to Hand Written Assembly".into(),
             default: true,
@@ -243,6 +280,50 @@ fn prefer_clang(build: &mut cc::Build) {
     }
 }
 
+fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(), Box<dyn std::error::Error>> {
+    // Only add ASM files if enabled
+    if !env::var("CARGO_FEATURE_ENABLE_ASM").is_ok() {
+        return Ok(());
+    }
+
+    if build_info.is_arm64 {
+        // ARM64: Add .S files directly to the build
+        build
+            .file("7z/Asm/arm64/LzmaDecOpt.S")
+            .file("7z/Asm/arm64/7zAsm.S");
+    } else if build_info.is_x64 || build_info.is_x86 {
+        // Get the right directory for precompiled objects
+        let obj_dir = if build_info.is_windows {
+            if build_info.is_x64 { "precompiled-asm/x86/win-x64" }
+            else { "precompiled-asm/x86/win-x86" }
+        } else {
+            if build_info.is_x64 { "precompiled-asm/x86/linux-x64" }
+            else { "precompiled-asm/x86/linux-x86" }
+        };
+
+        // List all object files
+        let mut objects = vec![
+            "7zCrcOpt",
+            "XzCrc64Opt", 
+            "AesOpt",
+            "Sha1Opt",
+            "Sha256Opt",
+        ];
+
+        // LzmaDecOpt is 64-bit only
+        if build_info.is_x64 {
+            objects.push("LzmaDecOpt");
+        }
+
+        // Add each object file to the build
+        for obj in objects {
+            build.object(format!("{}/{}.o", obj_dir, obj));
+        }
+    }
+
+    Ok(())
+}
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Disable rust-analyzer before uncommenting.
     // Windows devs may need a different solution, but this works for Linux & macOS
@@ -261,15 +342,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let platform_info = PlatformInfo::new(&build.get_compiler());
     let defines = get_defines(&platform_info);
 
+    // Apply defines to cc::Build
+    for (name, define) in &defines {
+        build.define(name, define.value.as_deref());
+    }
+
     // Base compilation flags 
     build
         .files(source_files)
         .include("7z/C");
 
-    // Apply defines to cc::Build
-    for (name, define) in &defines {
-        build.define(name, define.value.as_deref());
-    }
+    // Link assembly files if enabled
+    add_asm_files(&mut build, &platform_info)?;
 
     // Compile the library
     build.compile("7zip");
