@@ -12,3 +12,4 @@
 
 // Threading for the multithreaded logic
 #include "7z/C/Threads.h"
+#include "7z/C/CpuArch.h"
