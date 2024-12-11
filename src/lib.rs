@@ -61,6 +61,25 @@ pub unsafe extern "C" fn LzmaDecode_Out(
     LzmaDecode(dest, destLen, src, srcLen, propData, propSize, finishMode, status, alloc)
 }
 
+#[cfg(feature = "test-build-size")]
+#[no_mangle]
+pub unsafe extern "C" fn LzmaEncode_Out(
+    dest: *mut Byte,
+    destLen: *mut SizeT,
+    src: *const Byte,
+    srcLen: SizeT,
+    props: *const CLzmaEncProps,
+    propsEncoded: *mut Byte,
+    propsSize: *mut SizeT,
+    writeEndMark: ::core::ffi::c_int,
+    progress: ICompressProgressPtr,
+    alloc: ISzAllocPtr,
+    allocBig: ISzAllocPtr,
+) -> SRes
+{
+    LzmaEncode(dest, destLen, src, srcLen, props, propsEncoded, propsSize, writeEndMark, progress, alloc, allocBig)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
