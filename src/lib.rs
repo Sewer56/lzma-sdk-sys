@@ -1,5 +1,5 @@
 #![doc = include_str!("../README.md")]
-#![cfg_attr(not(test), no_std)]
+#![cfg_attr(not(feature = "std"), no_std)]
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
@@ -9,6 +9,10 @@ use core::ffi::c_void;
 extern crate alloc;
 extern crate core;
 
+#[cfg(not(feature = "generate-bindings"))]
+include!("bindings.rs");
+
+#[cfg(feature = "generate-bindings")]
 include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 
 // Provide a default allocator implementation for lzma encoder.
@@ -39,6 +43,22 @@ unsafe extern "C" fn sz_alloc(_p: ISzAllocPtr, size: usize) -> *mut c_void {
 
 unsafe extern "C" fn sz_free(_p: ISzAllocPtr, address: *mut c_void) {
     libc::free(address)
+}
+
+#[cfg(feature = "test-build-size")]
+#[no_mangle]
+pub unsafe extern "C" fn LzmaDecode_Out(
+    dest: *mut Byte,
+    destLen: *mut SizeT,
+    src: *const Byte,
+    srcLen: *mut SizeT,
+    propData: *const Byte,
+    propSize: ::core::ffi::c_uint,
+    finishMode: ELzmaFinishMode,
+    status: *mut ELzmaStatus,
+    alloc: ISzAllocPtr,
+) -> SRes {
+    LzmaDecode(dest, destLen, src, srcLen, propData, propSize, finishMode, status, alloc)
 }
 
 #[cfg(test)]

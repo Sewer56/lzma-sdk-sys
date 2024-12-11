@@ -149,7 +149,10 @@ The crate provides several configuration options through Cargo features:
 
 ### Core Features
 
-- `enable-asm`: Use hand-optimized assembly routines for improved performance (enabled by default)
+- `std` (default): Currently a no-op.
+- `enable-asm` (default): Use hand-optimized assembly routines for improved performance (enabled by default)
+- `generate-bindings`: Generates the bindings as part of build. You shouldn't usually need to run this. (Requires [clang])
+- `prefer-clang`: Uses `clang` as the compiler for the 7z library if available on $PATH
 
 ### Threading Options
 
@@ -168,7 +171,7 @@ used by any of the code we create bindings for.
 
 ### Core Features
 
-- `external-codecs`: Support for external codecs in 7z archive format (enabled by default)
+- `external-codecs` (default): Support for external codecs in 7z archive format (enabled by default)
 
 ### Additional Options
 
@@ -201,15 +204,14 @@ While other platforms may work (CI tests pass), they haven't been extensively ve
 
 ## Building
 
-To build this crate, you should [install clang] as per the `bindgen` documentation.
+Build should hopefully 'just work' with whatever toolchain you have installed.
+Bindings are pre-generated, and the assembly routines are pre-compiled on the relevant platforms.
 
-This crate uses clang for both building the 7z library code, and for creating 7z bindings.
-
-This choice is made such that, hopefully in the future, cross-language LTO will be supported, with
-both Rust and 7z code built via LLVM.
+If you have [clang] installed and available in your `$PATH`, the crate will attempt to build the
+7z library code with it if the `prefer-clang` feature is enabled. 
 
 No additional dependencies are required. Normally 7z requires you to bring your own assembler, but
-this crate provides precompiled assembly code, to make it usable just like any other Rust crate.
+this crate provides precompiled assembly code, to make it easy to use just like any other Rust crate.
 
 ## Current Status
 
@@ -241,4 +243,5 @@ For any other future code exposed, please see 7zip's own licensing terms. Chance
 [xz-utils]: https://github.com/tukaani-project/xz
 [7z-changelog]: https://www.7-zip.org/history.txt
 [install clang]: https://rust-lang.github.io/rust-bindgen/requirements.html
+[clang]: https://rust-lang.github.io/rust-bindgen/requirements.html
 [precomp-asm]: ./precompiled-asm/readme.md

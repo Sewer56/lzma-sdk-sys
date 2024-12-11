@@ -3,7 +3,6 @@ name = "lzma-sdk-sys"
 version = "0.1.0"
 edition = "2021"
 authors = ["Sewer56 <admin@sewer56.dev>"]
-license = "MIT"
 description = "Raw FFI bindings for the LZMA encoder/decoder parts of LZMA-SDK (7zip)"
 repository = "https://github.com/Sewer56/lzma-sdk-sys.git"
 readme = "README.MD"
@@ -12,7 +11,12 @@ license-file = "LICENSE"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = ["external-codecs", "enable-asm"]  # Multithreaded by default
+default = ["external-codecs", "enable-asm", "std"]  # Multithreaded by default
+
+# Bindings
+std = [] # basically a no-op.
+generate-bindings = [] # generates ths bindings.rs file as part of build
+prefer-clang = [] # uses `clang` as the compiler for the 7z library if available on $PATH
 
 # Threading
 st = []  # Single-threaded
@@ -28,6 +32,18 @@ debug-build-script = []
 
 # Enable Optimized Hand Rolled Assembly Routines
 enable-asm = []
+
+# These two are for cross-language LTO.
+# Will only work if `clang` is used to build the C library.
+fat-lto = [ "prefer-clang" ] # Enable fat-lto, will override thin-lto if specified
+thin-lto = [ "prefer-clang" ] # Enable thin-lto, will fallback to fat-lto if not supported
+test-build-size = [] # for testing build sizes in code, and LTO
+
+# use command to test
+# RUSTFLAGS="-C panic=abort -C lto=fat -C embed-bitcode=yes -C linker-plugin-lto" cargo +nightly bloat -Z build-std=std,panic_abort -Z build-std-features=panic_immediate_abort --crate-type cdylib --features fat-lto,test-build-size --target x86_64-unknown-linux-gnu
+# uncomment below to test.
+# [lib]
+# crate-type = ["cdylib"]
 
 [dependencies]
 libc = "0.2"

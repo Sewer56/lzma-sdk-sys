@@ -259,7 +259,7 @@ fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box
             if Path::new(&source).exists() {
                 sources.push(source);
             }
-        } else { // extension == "h"
+        } else {
             let source = format!("7z/C/{}.c", file_name);
             if Path::new(&source).exists() {
                 sources.push(source);
@@ -299,13 +299,39 @@ fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box
     Ok(sources)
 }
 
+/// This function would find the first flag in `flags` that is supported
+/// and add that to `build`.
+#[allow(dead_code)]
+fn flag_if_supported_with_fallbacks(build: &mut cc::Build, flags: &[&str]) {
+    let option = flags
+        .iter()
+        .find(|flag| build.is_flag_supported(flag).unwrap_or_default());
+
+    if let Some(flag) = option {
+        build.flag(flag);
+    }
+}
+
 fn prefer_clang(build: &mut cc::Build) {
     // We prefer clang, because that way it's all LLVM through and through,
     // which helps with performance.
+    if !env::var("CARGO_FEATURE_PREFER_CLANG").is_ok() {
+        return;
+    }
+
     if Command::new("clang").arg("--version").output().is_ok() {
         build.compiler("clang");
     } else {
         println!("cargo:warning=Clang not found, falling back to gcc");
+    }
+
+    if env::var("CARGO_FEATURE_FAT_LTO").is_ok() {
+        build.flag_if_supported("-flto");
+    } else if env::var("CARGO_FEATURE_THIN_LTO").is_ok() {
+        flag_if_supported_with_fallbacks(
+            build,
+            &["-flto=thin", "-flto"],
+        );
     }
 }
 
@@ -353,41 +379,8 @@ fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(),
     Ok(())
 }
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Disable rust-analyzer before uncommenting.
-    // Windows devs may need a different solution, but this works for Linux & macOS
-    // Also uncomment [profile.dev.build-override] in Cargo.toml
-
-    #[cfg(feature = "debug-build-script")] {
-      let url = format!("vscode://vadimcn.vscode-lldb/launch/config?{{'request':'attach','pid':{}}}", std::process::id());
-      Command::new("code").arg("--open-url").arg(url).output().unwrap();
-      sleep(Duration::from_secs(1)); // Wait for debugger to attach
-    }
-
-
-    let mut build = cc::Build::new();
-    prefer_clang(&mut build);
-    let source_files = get_source_files_from_includes("wrapper.h")?;
-    let platform_info = PlatformInfo::new(&build.get_compiler());
-    let defines = get_defines(&platform_info);
-
-    // Apply defines to cc::Build
-    for (name, define) in &defines {
-        build.define(name, define.value.as_deref());
-    }
-
-    // Base compilation flags 
-    build
-        .files(source_files)
-        .include("7z/C");
-
-    // Link assembly files if enabled
-    add_asm_files(&mut build, &platform_info)?;
-
-    // Compile the library
-    build.compile("7zip");
-
-    // Setup bindgen
+fn generate_bindings(defines: &HashMap<&'static str, Define>) -> Result<String, Box<dyn std::error::Error>> {
+    // Configure and generate bindings
     let mut bindgen = bindgen::Builder::default()
         .header("wrapper.h")
         .clang_arg("-I7z/C")
@@ -414,7 +407,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .rustified_enum(".*");
 
     // Apply defines to bindgen
-    for (name, define) in &defines {
+    for (name, define) in defines {
         let arg = if let Some(value) = &define.value {
             format!("-D{}={}", name, value)
         } else {
@@ -423,12 +416,53 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         bindgen = bindgen.clang_arg(&arg);
     }
 
-    // Generate bindings
-    let bindings = bindgen.generate()
-        .expect("Unable to generate bindings");
+    Ok(bindgen.generate()?.to_string())
+}
 
-    let out_path = PathBuf::from(env::var("OUT_DIR")?);
-    bindings.write_to_file(out_path.join("bindings.rs"))?;
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Disable rust-analyzer before uncommenting.
+    // Windows devs may need a different solution, but this works for Linux & macOS
+    // Also uncomment [profile.dev.build-override] in Cargo.toml
+
+    #[cfg(feature = "debug-build-script")] {
+      let url = format!("vscode://vadimcn.vscode-lldb/launch/config?{{'request':'attach','pid':{}}}", std::process::id());
+      Command::new("code").arg("--open-url").arg(url).output().unwrap();
+      sleep(Duration::from_secs(1)); // Wait for debugger to attach
+    }
+
+    let mut build = cc::Build::new();
+    prefer_clang(&mut build);
+    let source_files = get_source_files_from_includes("wrapper.h")?;
+    let platform_info = PlatformInfo::new(&build.get_compiler());
+    let defines = get_defines(&platform_info);
+
+    // Apply defines to cc::Build
+    for (name, define) in &defines {
+        build.define(name, define.value.as_deref());
+    }
+
+    // Base compilation flags 
+    build
+        .files(source_files)
+        .include("7z/C");
+
+    // Link assembly files if enabled
+    add_asm_files(&mut build, &platform_info)?;
+
+    // Compile the library
+    build.compile("7zip");
+
+    // Generate bindings if the feature is enabled
+    if env::var("CARGO_FEATURE_GENERATE_BINDINGS").is_ok() {
+        let bindings = generate_bindings(&defines)?;
+        let out_dir = PathBuf::from(env::var("OUT_DIR")?);
+        
+        // Write to OUT_DIR for compilation
+        fs::write(out_dir.join("bindings.rs"), &bindings)?;
+        
+        // Also save to src for version control
+        fs::write("src/bindings.rs", &bindings)?;
+    }
 
     // Print build configuration
     #[cfg(feature = "debug-build-logs")]
@@ -470,7 +504,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
     
-        // Print platform info
         println!("cargo:warning=");
         println!("cargo:warning=Platform Configuration:");
         println!("cargo:warning======================");
