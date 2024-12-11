@@ -53,6 +53,12 @@ jobs:
           - { os: macos-13, target: x86_64-apple-darwin, use-cross: false, features: "std,external-codecs,st" }
           - { os: macos-14, target: aarch64-apple-darwin, use-cross: false, features: "std,external-codecs,st" }
 
+          # Some esoteric targets
+          - { os: ubuntu-latest, target: loongarch64-unknown-linux-gnu, use-cross: true, features: "std,external-codecs,st" }
+          - { os: ubuntu-latest, target: powerpc-unknown-linux-gnu, use-cross: true, features: "std,external-codecs,st" }
+          - { os: ubuntu-latest, target: powerpc64-unknown-linux-gnu, use-cross: true, features: "std,external-codecs,st" }
+          - { os: ubuntu-latest, target: powerpc64le-unknown-linux-gnu, use-cross: true, features: "std,external-codecs,st" }
+          
     runs-on: ${{ matrix.os }}
 
     steps:
