@@ -393,7 +393,7 @@ fn generate_bindings(defines: &HashMap<&'static str, Define>) -> Result<String, 
         .impl_debug(true)
         .impl_partialeq(true)
         .size_t_is_usize(true)
-        .layout_tests(true)
+        .layout_tests(false) // Issues on Windows with multithreaded builds
         .generate_comments(true)
         .explicit_padding(true)
         .wrap_unsafe_ops(true)

@@ -369,15 +369,6 @@ pub struct max_align_t {
     pub __bindgen_padding_0: [u8; 8usize],
     pub __clang_max_align_nonce2: u128,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of max_align_t"][::core::mem::size_of::<max_align_t>() - 32usize];
-    ["Alignment of max_align_t"][::core::mem::align_of::<max_align_t>() - 16usize];
-    ["Offset of field: max_align_t::__clang_max_align_nonce1"]
-        [::core::mem::offset_of!(max_align_t, __clang_max_align_nonce1) - 0usize];
-    ["Offset of field: max_align_t::__clang_max_align_nonce2"]
-        [::core::mem::offset_of!(max_align_t, __clang_max_align_nonce2) - 16usize];
-};
 pub type SRes = ::core::ffi::c_int;
 pub type WRes = ::core::ffi::c_int;
 pub type Byte = ::core::ffi::c_uchar;
@@ -437,12 +428,6 @@ pub type __pid_t = ::core::ffi::c_int;
 pub struct __fsid_t {
     pub __val: [::core::ffi::c_int; 2usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __fsid_t"][::core::mem::size_of::<__fsid_t>() - 8usize];
-    ["Alignment of __fsid_t"][::core::mem::align_of::<__fsid_t>() - 4usize];
-    ["Offset of field: __fsid_t::__val"][::core::mem::offset_of!(__fsid_t, __val) - 0usize];
-};
 pub type __clock_t = ::core::ffi::c_long;
 pub type __rlim_t = ::core::ffi::c_ulong;
 pub type __rlim64_t = ::core::ffi::c_ulong;
@@ -500,12 +485,6 @@ pub type IByteIn = IByteIn_;
 pub struct IByteIn_ {
     pub Read: ::core::option::Option<unsafe extern "C" fn(p: IByteInPtr) -> Byte>,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of IByteIn_"][::core::mem::size_of::<IByteIn_>() - 8usize];
-    ["Alignment of IByteIn_"][::core::mem::align_of::<IByteIn_>() - 8usize];
-    ["Offset of field: IByteIn_::Read"][::core::mem::offset_of!(IByteIn_, Read) - 0usize];
-};
 pub type IByteOutPtr = *const IByteOut_;
 pub type IByteOut = IByteOut_;
 #[repr(C)]
@@ -513,12 +492,6 @@ pub type IByteOut = IByteOut_;
 pub struct IByteOut_ {
     pub Write: ::core::option::Option<unsafe extern "C" fn(p: IByteOutPtr, b: Byte)>,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of IByteOut_"][::core::mem::size_of::<IByteOut_>() - 8usize];
-    ["Alignment of IByteOut_"][::core::mem::align_of::<IByteOut_>() - 8usize];
-    ["Offset of field: IByteOut_::Write"][::core::mem::offset_of!(IByteOut_, Write) - 0usize];
-};
 pub type ISeqInStreamPtr = *const ISeqInStream_;
 pub type ISeqInStream = ISeqInStream_;
 #[repr(C)]
@@ -532,12 +505,6 @@ pub struct ISeqInStream_ {
         ) -> SRes,
     >,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of ISeqInStream_"][::core::mem::size_of::<ISeqInStream_>() - 8usize];
-    ["Alignment of ISeqInStream_"][::core::mem::align_of::<ISeqInStream_>() - 8usize];
-    ["Offset of field: ISeqInStream_::Read"][::core::mem::offset_of!(ISeqInStream_, Read) - 0usize];
-};
 unsafe extern "C" {
     pub fn SeqInStream_ReadMax(
         stream: ISeqInStreamPtr,
@@ -561,13 +528,6 @@ pub struct ISeqOutStream_ {
         ) -> usize,
     >,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of ISeqOutStream_"][::core::mem::size_of::<ISeqOutStream_>() - 8usize];
-    ["Alignment of ISeqOutStream_"][::core::mem::align_of::<ISeqOutStream_>() - 8usize];
-    ["Offset of field: ISeqOutStream_::Write"]
-        [::core::mem::offset_of!(ISeqOutStream_, Write) - 0usize];
-};
 #[repr(u32)]
 #[derive(Debug, Copy, Clone, Hash, PartialOrd, Ord, PartialEq, Eq)]
 pub enum ESzSeek {
@@ -591,15 +551,6 @@ pub struct ISeekInStream_ {
         unsafe extern "C" fn(p: ISeekInStreamPtr, pos: *mut Int64, origin: ESzSeek) -> SRes,
     >,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of ISeekInStream_"][::core::mem::size_of::<ISeekInStream_>() - 16usize];
-    ["Alignment of ISeekInStream_"][::core::mem::align_of::<ISeekInStream_>() - 8usize];
-    ["Offset of field: ISeekInStream_::Read"]
-        [::core::mem::offset_of!(ISeekInStream_, Read) - 0usize];
-    ["Offset of field: ISeekInStream_::Seek"]
-        [::core::mem::offset_of!(ISeekInStream_, Seek) - 8usize];
-};
 pub type ILookInStreamPtr = *const ILookInStream_;
 pub type ILookInStream = ILookInStream_;
 #[repr(C)]
@@ -625,19 +576,6 @@ pub struct ILookInStream_ {
         unsafe extern "C" fn(p: ILookInStreamPtr, pos: *mut Int64, origin: ESzSeek) -> SRes,
     >,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of ILookInStream_"][::core::mem::size_of::<ILookInStream_>() - 32usize];
-    ["Alignment of ILookInStream_"][::core::mem::align_of::<ILookInStream_>() - 8usize];
-    ["Offset of field: ILookInStream_::Look"]
-        [::core::mem::offset_of!(ILookInStream_, Look) - 0usize];
-    ["Offset of field: ILookInStream_::Skip"]
-        [::core::mem::offset_of!(ILookInStream_, Skip) - 8usize];
-    ["Offset of field: ILookInStream_::Read"]
-        [::core::mem::offset_of!(ILookInStream_, Read) - 16usize];
-    ["Offset of field: ILookInStream_::Seek"]
-        [::core::mem::offset_of!(ILookInStream_, Seek) - 24usize];
-};
 unsafe extern "C" {
     pub fn LookInStream_LookRead(
         stream: ILookInStreamPtr,
@@ -673,19 +611,6 @@ pub struct CLookToRead2 {
     pub buf: *mut Byte,
     pub bufSize: usize,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CLookToRead2"][::core::mem::size_of::<CLookToRead2>() - 72usize];
-    ["Alignment of CLookToRead2"][::core::mem::align_of::<CLookToRead2>() - 8usize];
-    ["Offset of field: CLookToRead2::vt"][::core::mem::offset_of!(CLookToRead2, vt) - 0usize];
-    ["Offset of field: CLookToRead2::realStream"]
-        [::core::mem::offset_of!(CLookToRead2, realStream) - 32usize];
-    ["Offset of field: CLookToRead2::pos"][::core::mem::offset_of!(CLookToRead2, pos) - 40usize];
-    ["Offset of field: CLookToRead2::size"][::core::mem::offset_of!(CLookToRead2, size) - 48usize];
-    ["Offset of field: CLookToRead2::buf"][::core::mem::offset_of!(CLookToRead2, buf) - 56usize];
-    ["Offset of field: CLookToRead2::bufSize"]
-        [::core::mem::offset_of!(CLookToRead2, bufSize) - 64usize];
-};
 impl Default for CLookToRead2 {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -704,14 +629,6 @@ pub struct CSecToLook {
     pub vt: ISeqInStream,
     pub realStream: ILookInStreamPtr,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CSecToLook"][::core::mem::size_of::<CSecToLook>() - 16usize];
-    ["Alignment of CSecToLook"][::core::mem::align_of::<CSecToLook>() - 8usize];
-    ["Offset of field: CSecToLook::vt"][::core::mem::offset_of!(CSecToLook, vt) - 0usize];
-    ["Offset of field: CSecToLook::realStream"]
-        [::core::mem::offset_of!(CSecToLook, realStream) - 8usize];
-};
 impl Default for CSecToLook {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -730,14 +647,6 @@ pub struct CSecToRead {
     pub vt: ISeqInStream,
     pub realStream: ILookInStreamPtr,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CSecToRead"][::core::mem::size_of::<CSecToRead>() - 16usize];
-    ["Alignment of CSecToRead"][::core::mem::align_of::<CSecToRead>() - 8usize];
-    ["Offset of field: CSecToRead::vt"][::core::mem::offset_of!(CSecToRead, vt) - 0usize];
-    ["Offset of field: CSecToRead::realStream"]
-        [::core::mem::offset_of!(CSecToRead, realStream) - 8usize];
-};
 impl Default for CSecToRead {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -759,13 +668,6 @@ pub struct ICompressProgress_ {
         unsafe extern "C" fn(p: ICompressProgressPtr, inSize: UInt64, outSize: UInt64) -> SRes,
     >,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of ICompressProgress_"][::core::mem::size_of::<ICompressProgress_>() - 8usize];
-    ["Alignment of ICompressProgress_"][::core::mem::align_of::<ICompressProgress_>() - 8usize];
-    ["Offset of field: ICompressProgress_::Progress"]
-        [::core::mem::offset_of!(ICompressProgress_, Progress) - 0usize];
-};
 pub type ISzAllocPtr = *const ISzAlloc;
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone, Hash, PartialOrd, Ord, PartialEq, Eq)]
@@ -777,13 +679,6 @@ pub struct ISzAlloc {
         unsafe extern "C" fn(p: ISzAllocPtr, address: *mut ::core::ffi::c_void),
     >,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of ISzAlloc"][::core::mem::size_of::<ISzAlloc>() - 16usize];
-    ["Alignment of ISzAlloc"][::core::mem::align_of::<ISzAlloc>() - 8usize];
-    ["Offset of field: ISzAlloc::Alloc"][::core::mem::offset_of!(ISzAlloc, Alloc) - 0usize];
-    ["Offset of field: ISzAlloc::Free"][::core::mem::offset_of!(ISzAlloc, Free) - 8usize];
-};
 pub type CLzmaProb = UInt16;
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone, Hash, PartialOrd, Ord, PartialEq, Eq)]
@@ -794,16 +689,6 @@ pub struct CLzmaProps {
     pub _pad_: Byte,
     pub dicSize: UInt32,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CLzmaProps"][::core::mem::size_of::<CLzmaProps>() - 8usize];
-    ["Alignment of CLzmaProps"][::core::mem::align_of::<CLzmaProps>() - 4usize];
-    ["Offset of field: CLzmaProps::lc"][::core::mem::offset_of!(CLzmaProps, lc) - 0usize];
-    ["Offset of field: CLzmaProps::lp"][::core::mem::offset_of!(CLzmaProps, lp) - 1usize];
-    ["Offset of field: CLzmaProps::pb"][::core::mem::offset_of!(CLzmaProps, pb) - 2usize];
-    ["Offset of field: CLzmaProps::_pad_"][::core::mem::offset_of!(CLzmaProps, _pad_) - 3usize];
-    ["Offset of field: CLzmaProps::dicSize"][::core::mem::offset_of!(CLzmaProps, dicSize) - 4usize];
-};
 unsafe extern "C" {
     pub fn LzmaProps_Decode(
         p: *mut CLzmaProps,
@@ -833,34 +718,6 @@ pub struct CLzmaDec {
     pub tempBuf: [Byte; 20usize],
     pub __bindgen_padding_0: [u8; 4usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CLzmaDec"][::core::mem::size_of::<CLzmaDec>() - 128usize];
-    ["Alignment of CLzmaDec"][::core::mem::align_of::<CLzmaDec>() - 8usize];
-    ["Offset of field: CLzmaDec::prop"][::core::mem::offset_of!(CLzmaDec, prop) - 0usize];
-    ["Offset of field: CLzmaDec::probs"][::core::mem::offset_of!(CLzmaDec, probs) - 8usize];
-    ["Offset of field: CLzmaDec::probs_1664"]
-        [::core::mem::offset_of!(CLzmaDec, probs_1664) - 16usize];
-    ["Offset of field: CLzmaDec::dic"][::core::mem::offset_of!(CLzmaDec, dic) - 24usize];
-    ["Offset of field: CLzmaDec::dicBufSize"]
-        [::core::mem::offset_of!(CLzmaDec, dicBufSize) - 32usize];
-    ["Offset of field: CLzmaDec::dicPos"][::core::mem::offset_of!(CLzmaDec, dicPos) - 40usize];
-    ["Offset of field: CLzmaDec::buf"][::core::mem::offset_of!(CLzmaDec, buf) - 48usize];
-    ["Offset of field: CLzmaDec::range"][::core::mem::offset_of!(CLzmaDec, range) - 56usize];
-    ["Offset of field: CLzmaDec::code"][::core::mem::offset_of!(CLzmaDec, code) - 60usize];
-    ["Offset of field: CLzmaDec::processedPos"]
-        [::core::mem::offset_of!(CLzmaDec, processedPos) - 64usize];
-    ["Offset of field: CLzmaDec::checkDicSize"]
-        [::core::mem::offset_of!(CLzmaDec, checkDicSize) - 68usize];
-    ["Offset of field: CLzmaDec::reps"][::core::mem::offset_of!(CLzmaDec, reps) - 72usize];
-    ["Offset of field: CLzmaDec::state"][::core::mem::offset_of!(CLzmaDec, state) - 88usize];
-    ["Offset of field: CLzmaDec::remainLen"]
-        [::core::mem::offset_of!(CLzmaDec, remainLen) - 92usize];
-    ["Offset of field: CLzmaDec::numProbs"][::core::mem::offset_of!(CLzmaDec, numProbs) - 96usize];
-    ["Offset of field: CLzmaDec::tempBufSize"]
-        [::core::mem::offset_of!(CLzmaDec, tempBufSize) - 100usize];
-    ["Offset of field: CLzmaDec::tempBuf"][::core::mem::offset_of!(CLzmaDec, tempBuf) - 104usize];
-};
 impl Default for CLzmaDec {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -964,36 +821,6 @@ pub struct CLzmaEncProps {
     pub reduceSize: UInt64,
     pub affinity: UInt64,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CLzmaEncProps"][::core::mem::size_of::<CLzmaEncProps>() - 72usize];
-    ["Alignment of CLzmaEncProps"][::core::mem::align_of::<CLzmaEncProps>() - 8usize];
-    ["Offset of field: CLzmaEncProps::level"]
-        [::core::mem::offset_of!(CLzmaEncProps, level) - 0usize];
-    ["Offset of field: CLzmaEncProps::dictSize"]
-        [::core::mem::offset_of!(CLzmaEncProps, dictSize) - 4usize];
-    ["Offset of field: CLzmaEncProps::lc"][::core::mem::offset_of!(CLzmaEncProps, lc) - 8usize];
-    ["Offset of field: CLzmaEncProps::lp"][::core::mem::offset_of!(CLzmaEncProps, lp) - 12usize];
-    ["Offset of field: CLzmaEncProps::pb"][::core::mem::offset_of!(CLzmaEncProps, pb) - 16usize];
-    ["Offset of field: CLzmaEncProps::algo"]
-        [::core::mem::offset_of!(CLzmaEncProps, algo) - 20usize];
-    ["Offset of field: CLzmaEncProps::fb"][::core::mem::offset_of!(CLzmaEncProps, fb) - 24usize];
-    ["Offset of field: CLzmaEncProps::btMode"]
-        [::core::mem::offset_of!(CLzmaEncProps, btMode) - 28usize];
-    ["Offset of field: CLzmaEncProps::numHashBytes"]
-        [::core::mem::offset_of!(CLzmaEncProps, numHashBytes) - 32usize];
-    ["Offset of field: CLzmaEncProps::numHashOutBits"]
-        [::core::mem::offset_of!(CLzmaEncProps, numHashOutBits) - 36usize];
-    ["Offset of field: CLzmaEncProps::mc"][::core::mem::offset_of!(CLzmaEncProps, mc) - 40usize];
-    ["Offset of field: CLzmaEncProps::writeEndMark"]
-        [::core::mem::offset_of!(CLzmaEncProps, writeEndMark) - 44usize];
-    ["Offset of field: CLzmaEncProps::numThreads"]
-        [::core::mem::offset_of!(CLzmaEncProps, numThreads) - 48usize];
-    ["Offset of field: CLzmaEncProps::reduceSize"]
-        [::core::mem::offset_of!(CLzmaEncProps, reduceSize) - 56usize];
-    ["Offset of field: CLzmaEncProps::affinity"]
-        [::core::mem::offset_of!(CLzmaEncProps, affinity) - 64usize];
-};
 unsafe extern "C" {
     pub fn LzmaEncProps_Init(p: *mut CLzmaEncProps);
 }
@@ -1081,22 +908,6 @@ pub struct CLzma2Dec {
     pub unpackSize: UInt32,
     pub decoder: CLzmaDec,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CLzma2Dec"][::core::mem::size_of::<CLzma2Dec>() - 144usize];
-    ["Alignment of CLzma2Dec"][::core::mem::align_of::<CLzma2Dec>() - 8usize];
-    ["Offset of field: CLzma2Dec::state"][::core::mem::offset_of!(CLzma2Dec, state) - 0usize];
-    ["Offset of field: CLzma2Dec::control"][::core::mem::offset_of!(CLzma2Dec, control) - 4usize];
-    ["Offset of field: CLzma2Dec::needInitLevel"]
-        [::core::mem::offset_of!(CLzma2Dec, needInitLevel) - 5usize];
-    ["Offset of field: CLzma2Dec::isExtraMode"]
-        [::core::mem::offset_of!(CLzma2Dec, isExtraMode) - 6usize];
-    ["Offset of field: CLzma2Dec::_pad_"][::core::mem::offset_of!(CLzma2Dec, _pad_) - 7usize];
-    ["Offset of field: CLzma2Dec::packSize"][::core::mem::offset_of!(CLzma2Dec, packSize) - 8usize];
-    ["Offset of field: CLzma2Dec::unpackSize"]
-        [::core::mem::offset_of!(CLzma2Dec, unpackSize) - 12usize];
-    ["Offset of field: CLzma2Dec::decoder"][::core::mem::offset_of!(CLzma2Dec, decoder) - 16usize];
-};
 impl Default for CLzma2Dec {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -1173,21 +984,6 @@ pub struct CLzma2EncProps {
     pub numTotalThreads: ::core::ffi::c_int,
     pub __bindgen_padding_0: [u8; 4usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CLzma2EncProps"][::core::mem::size_of::<CLzma2EncProps>() - 96usize];
-    ["Alignment of CLzma2EncProps"][::core::mem::align_of::<CLzma2EncProps>() - 8usize];
-    ["Offset of field: CLzma2EncProps::lzmaProps"]
-        [::core::mem::offset_of!(CLzma2EncProps, lzmaProps) - 0usize];
-    ["Offset of field: CLzma2EncProps::blockSize"]
-        [::core::mem::offset_of!(CLzma2EncProps, blockSize) - 72usize];
-    ["Offset of field: CLzma2EncProps::numBlockThreads_Reduced"]
-        [::core::mem::offset_of!(CLzma2EncProps, numBlockThreads_Reduced) - 80usize];
-    ["Offset of field: CLzma2EncProps::numBlockThreads_Max"]
-        [::core::mem::offset_of!(CLzma2EncProps, numBlockThreads_Max) - 84usize];
-    ["Offset of field: CLzma2EncProps::numTotalThreads"]
-        [::core::mem::offset_of!(CLzma2EncProps, numTotalThreads) - 88usize];
-};
 unsafe extern "C" {
     pub fn Lzma2EncProps_Init(p: *mut CLzma2EncProps);
 }
@@ -1264,71 +1060,6 @@ pub struct CMatchFinder {
     pub numRefs: usize,
     pub expectedDataSize: UInt64,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CMatchFinder"][::core::mem::size_of::<CMatchFinder>() - 1160usize];
-    ["Alignment of CMatchFinder"][::core::mem::align_of::<CMatchFinder>() - 8usize];
-    ["Offset of field: CMatchFinder::buffer"]
-        [::core::mem::offset_of!(CMatchFinder, buffer) - 0usize];
-    ["Offset of field: CMatchFinder::pos"][::core::mem::offset_of!(CMatchFinder, pos) - 8usize];
-    ["Offset of field: CMatchFinder::posLimit"]
-        [::core::mem::offset_of!(CMatchFinder, posLimit) - 12usize];
-    ["Offset of field: CMatchFinder::streamPos"]
-        [::core::mem::offset_of!(CMatchFinder, streamPos) - 16usize];
-    ["Offset of field: CMatchFinder::lenLimit"]
-        [::core::mem::offset_of!(CMatchFinder, lenLimit) - 20usize];
-    ["Offset of field: CMatchFinder::cyclicBufferPos"]
-        [::core::mem::offset_of!(CMatchFinder, cyclicBufferPos) - 24usize];
-    ["Offset of field: CMatchFinder::cyclicBufferSize"]
-        [::core::mem::offset_of!(CMatchFinder, cyclicBufferSize) - 28usize];
-    ["Offset of field: CMatchFinder::streamEndWasReached"]
-        [::core::mem::offset_of!(CMatchFinder, streamEndWasReached) - 32usize];
-    ["Offset of field: CMatchFinder::btMode"]
-        [::core::mem::offset_of!(CMatchFinder, btMode) - 33usize];
-    ["Offset of field: CMatchFinder::bigHash"]
-        [::core::mem::offset_of!(CMatchFinder, bigHash) - 34usize];
-    ["Offset of field: CMatchFinder::directInput"]
-        [::core::mem::offset_of!(CMatchFinder, directInput) - 35usize];
-    ["Offset of field: CMatchFinder::matchMaxLen"]
-        [::core::mem::offset_of!(CMatchFinder, matchMaxLen) - 36usize];
-    ["Offset of field: CMatchFinder::hash"][::core::mem::offset_of!(CMatchFinder, hash) - 40usize];
-    ["Offset of field: CMatchFinder::son"][::core::mem::offset_of!(CMatchFinder, son) - 48usize];
-    ["Offset of field: CMatchFinder::hashMask"]
-        [::core::mem::offset_of!(CMatchFinder, hashMask) - 56usize];
-    ["Offset of field: CMatchFinder::cutValue"]
-        [::core::mem::offset_of!(CMatchFinder, cutValue) - 60usize];
-    ["Offset of field: CMatchFinder::bufBase"]
-        [::core::mem::offset_of!(CMatchFinder, bufBase) - 64usize];
-    ["Offset of field: CMatchFinder::stream"]
-        [::core::mem::offset_of!(CMatchFinder, stream) - 72usize];
-    ["Offset of field: CMatchFinder::blockSize"]
-        [::core::mem::offset_of!(CMatchFinder, blockSize) - 80usize];
-    ["Offset of field: CMatchFinder::keepSizeBefore"]
-        [::core::mem::offset_of!(CMatchFinder, keepSizeBefore) - 84usize];
-    ["Offset of field: CMatchFinder::keepSizeAfter"]
-        [::core::mem::offset_of!(CMatchFinder, keepSizeAfter) - 88usize];
-    ["Offset of field: CMatchFinder::numHashBytes"]
-        [::core::mem::offset_of!(CMatchFinder, numHashBytes) - 92usize];
-    ["Offset of field: CMatchFinder::directInputRem"]
-        [::core::mem::offset_of!(CMatchFinder, directInputRem) - 96usize];
-    ["Offset of field: CMatchFinder::historySize"]
-        [::core::mem::offset_of!(CMatchFinder, historySize) - 104usize];
-    ["Offset of field: CMatchFinder::fixedHashSize"]
-        [::core::mem::offset_of!(CMatchFinder, fixedHashSize) - 108usize];
-    ["Offset of field: CMatchFinder::numHashBytes_Min"]
-        [::core::mem::offset_of!(CMatchFinder, numHashBytes_Min) - 112usize];
-    ["Offset of field: CMatchFinder::numHashOutBits"]
-        [::core::mem::offset_of!(CMatchFinder, numHashOutBits) - 113usize];
-    ["Offset of field: CMatchFinder::_pad2_"]
-        [::core::mem::offset_of!(CMatchFinder, _pad2_) - 114usize];
-    ["Offset of field: CMatchFinder::result"]
-        [::core::mem::offset_of!(CMatchFinder, result) - 116usize];
-    ["Offset of field: CMatchFinder::crc"][::core::mem::offset_of!(CMatchFinder, crc) - 120usize];
-    ["Offset of field: CMatchFinder::numRefs"]
-        [::core::mem::offset_of!(CMatchFinder, numRefs) - 1144usize];
-    ["Offset of field: CMatchFinder::expectedDataSize"]
-        [::core::mem::offset_of!(CMatchFinder, expectedDataSize) - 1152usize];
-};
 impl Default for CMatchFinder {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -1400,20 +1131,6 @@ pub struct IMatchFinder2 {
     pub GetMatches: Mf_GetMatches_Func,
     pub Skip: Mf_Skip_Func,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of IMatchFinder2"][::core::mem::size_of::<IMatchFinder2>() - 40usize];
-    ["Alignment of IMatchFinder2"][::core::mem::align_of::<IMatchFinder2>() - 8usize];
-    ["Offset of field: IMatchFinder2::Init"][::core::mem::offset_of!(IMatchFinder2, Init) - 0usize];
-    ["Offset of field: IMatchFinder2::GetNumAvailableBytes"]
-        [::core::mem::offset_of!(IMatchFinder2, GetNumAvailableBytes) - 8usize];
-    ["Offset of field: IMatchFinder2::GetPointerToCurrentPos"]
-        [::core::mem::offset_of!(IMatchFinder2, GetPointerToCurrentPos) - 16usize];
-    ["Offset of field: IMatchFinder2::GetMatches"]
-        [::core::mem::offset_of!(IMatchFinder2, GetMatches) - 24usize];
-    ["Offset of field: IMatchFinder2::Skip"]
-        [::core::mem::offset_of!(IMatchFinder2, Skip) - 32usize];
-};
 unsafe extern "C" {
     pub fn MatchFinder_CreateVTable(p: *mut CMatchFinder, vTable: *mut IMatchFinder2);
 }
@@ -1457,38 +1174,18 @@ pub struct timespec {
     pub tv_sec: __time_t,
     pub tv_nsec: __syscall_slong_t,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of timespec"][::core::mem::size_of::<timespec>() - 16usize];
-    ["Alignment of timespec"][::core::mem::align_of::<timespec>() - 8usize];
-    ["Offset of field: timespec::tv_sec"][::core::mem::offset_of!(timespec, tv_sec) - 0usize];
-    ["Offset of field: timespec::tv_nsec"][::core::mem::offset_of!(timespec, tv_nsec) - 8usize];
-};
 pub type pid_t = __pid_t;
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone, Hash, PartialOrd, Ord, PartialEq, Eq)]
 pub struct sched_param {
     pub sched_priority: ::core::ffi::c_int,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of sched_param"][::core::mem::size_of::<sched_param>() - 4usize];
-    ["Alignment of sched_param"][::core::mem::align_of::<sched_param>() - 4usize];
-    ["Offset of field: sched_param::sched_priority"]
-        [::core::mem::offset_of!(sched_param, sched_priority) - 0usize];
-};
 pub type __cpu_mask = ::core::ffi::c_ulong;
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone, Hash, PartialOrd, Ord, PartialEq, Eq)]
 pub struct cpu_set_t {
     pub __bits: [__cpu_mask; 16usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of cpu_set_t"][::core::mem::size_of::<cpu_set_t>() - 128usize];
-    ["Alignment of cpu_set_t"][::core::mem::align_of::<cpu_set_t>() - 8usize];
-    ["Offset of field: cpu_set_t::__bits"][::core::mem::offset_of!(cpu_set_t, __bits) - 0usize];
-};
 unsafe extern "C" {
     pub fn __sched_cpucount(__setsize: usize, __setp: *const cpu_set_t) -> ::core::ffi::c_int;
 }
@@ -1543,22 +1240,6 @@ pub struct tm {
     pub tm_gmtoff: ::core::ffi::c_long,
     pub tm_zone: *const ::core::ffi::c_char,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of tm"][::core::mem::size_of::<tm>() - 56usize];
-    ["Alignment of tm"][::core::mem::align_of::<tm>() - 8usize];
-    ["Offset of field: tm::tm_sec"][::core::mem::offset_of!(tm, tm_sec) - 0usize];
-    ["Offset of field: tm::tm_min"][::core::mem::offset_of!(tm, tm_min) - 4usize];
-    ["Offset of field: tm::tm_hour"][::core::mem::offset_of!(tm, tm_hour) - 8usize];
-    ["Offset of field: tm::tm_mday"][::core::mem::offset_of!(tm, tm_mday) - 12usize];
-    ["Offset of field: tm::tm_mon"][::core::mem::offset_of!(tm, tm_mon) - 16usize];
-    ["Offset of field: tm::tm_year"][::core::mem::offset_of!(tm, tm_year) - 20usize];
-    ["Offset of field: tm::tm_wday"][::core::mem::offset_of!(tm, tm_wday) - 24usize];
-    ["Offset of field: tm::tm_yday"][::core::mem::offset_of!(tm, tm_yday) - 28usize];
-    ["Offset of field: tm::tm_isdst"][::core::mem::offset_of!(tm, tm_isdst) - 32usize];
-    ["Offset of field: tm::tm_gmtoff"][::core::mem::offset_of!(tm, tm_gmtoff) - 40usize];
-    ["Offset of field: tm::tm_zone"][::core::mem::offset_of!(tm, tm_zone) - 48usize];
-};
 impl Default for tm {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -1576,15 +1257,6 @@ pub struct itimerspec {
     pub it_interval: timespec,
     pub it_value: timespec,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of itimerspec"][::core::mem::size_of::<itimerspec>() - 32usize];
-    ["Alignment of itimerspec"][::core::mem::align_of::<itimerspec>() - 8usize];
-    ["Offset of field: itimerspec::it_interval"]
-        [::core::mem::offset_of!(itimerspec, it_interval) - 0usize];
-    ["Offset of field: itimerspec::it_value"]
-        [::core::mem::offset_of!(itimerspec, it_value) - 16usize];
-};
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct sigevent {
@@ -1599,21 +1271,6 @@ pub struct __locale_struct {
     pub __ctype_toupper: *const ::core::ffi::c_int,
     pub __names: [*const ::core::ffi::c_char; 13usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __locale_struct"][::core::mem::size_of::<__locale_struct>() - 232usize];
-    ["Alignment of __locale_struct"][::core::mem::align_of::<__locale_struct>() - 8usize];
-    ["Offset of field: __locale_struct::__locales"]
-        [::core::mem::offset_of!(__locale_struct, __locales) - 0usize];
-    ["Offset of field: __locale_struct::__ctype_b"]
-        [::core::mem::offset_of!(__locale_struct, __ctype_b) - 104usize];
-    ["Offset of field: __locale_struct::__ctype_tolower"]
-        [::core::mem::offset_of!(__locale_struct, __ctype_tolower) - 112usize];
-    ["Offset of field: __locale_struct::__ctype_toupper"]
-        [::core::mem::offset_of!(__locale_struct, __ctype_toupper) - 120usize];
-    ["Offset of field: __locale_struct::__names"]
-        [::core::mem::offset_of!(__locale_struct, __names) - 128usize];
-};
 impl Default for __locale_struct {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -1776,27 +1433,6 @@ pub struct __atomic_wide_counter__bindgen_ty_1 {
     pub __low: ::core::ffi::c_uint,
     pub __high: ::core::ffi::c_uint,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __atomic_wide_counter__bindgen_ty_1"]
-        [::core::mem::size_of::<__atomic_wide_counter__bindgen_ty_1>() - 8usize];
-    ["Alignment of __atomic_wide_counter__bindgen_ty_1"]
-        [::core::mem::align_of::<__atomic_wide_counter__bindgen_ty_1>() - 4usize];
-    ["Offset of field: __atomic_wide_counter__bindgen_ty_1::__low"]
-        [::core::mem::offset_of!(__atomic_wide_counter__bindgen_ty_1, __low) - 0usize];
-    ["Offset of field: __atomic_wide_counter__bindgen_ty_1::__high"]
-        [::core::mem::offset_of!(__atomic_wide_counter__bindgen_ty_1, __high) - 4usize];
-};
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __atomic_wide_counter"][::core::mem::size_of::<__atomic_wide_counter>() - 8usize];
-    ["Alignment of __atomic_wide_counter"]
-        [::core::mem::align_of::<__atomic_wide_counter>() - 8usize];
-    ["Offset of field: __atomic_wide_counter::__value64"]
-        [::core::mem::offset_of!(__atomic_wide_counter, __value64) - 0usize];
-    ["Offset of field: __atomic_wide_counter::__value32"]
-        [::core::mem::offset_of!(__atomic_wide_counter, __value32) - 0usize];
-};
 impl Default for __atomic_wide_counter {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -1817,17 +1453,6 @@ pub struct __pthread_internal_list {
     pub __prev: *mut __pthread_internal_list,
     pub __next: *mut __pthread_internal_list,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __pthread_internal_list"]
-        [::core::mem::size_of::<__pthread_internal_list>() - 16usize];
-    ["Alignment of __pthread_internal_list"]
-        [::core::mem::align_of::<__pthread_internal_list>() - 8usize];
-    ["Offset of field: __pthread_internal_list::__prev"]
-        [::core::mem::offset_of!(__pthread_internal_list, __prev) - 0usize];
-    ["Offset of field: __pthread_internal_list::__next"]
-        [::core::mem::offset_of!(__pthread_internal_list, __next) - 8usize];
-};
 impl Default for __pthread_internal_list {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -1843,15 +1468,6 @@ pub type __pthread_list_t = __pthread_internal_list;
 pub struct __pthread_internal_slist {
     pub __next: *mut __pthread_internal_slist,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __pthread_internal_slist"]
-        [::core::mem::size_of::<__pthread_internal_slist>() - 8usize];
-    ["Alignment of __pthread_internal_slist"]
-        [::core::mem::align_of::<__pthread_internal_slist>() - 8usize];
-    ["Offset of field: __pthread_internal_slist::__next"]
-        [::core::mem::offset_of!(__pthread_internal_slist, __next) - 0usize];
-};
 impl Default for __pthread_internal_slist {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -1874,27 +1490,6 @@ pub struct __pthread_mutex_s {
     pub __elision: ::core::ffi::c_short,
     pub __list: __pthread_list_t,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __pthread_mutex_s"][::core::mem::size_of::<__pthread_mutex_s>() - 40usize];
-    ["Alignment of __pthread_mutex_s"][::core::mem::align_of::<__pthread_mutex_s>() - 8usize];
-    ["Offset of field: __pthread_mutex_s::__lock"]
-        [::core::mem::offset_of!(__pthread_mutex_s, __lock) - 0usize];
-    ["Offset of field: __pthread_mutex_s::__count"]
-        [::core::mem::offset_of!(__pthread_mutex_s, __count) - 4usize];
-    ["Offset of field: __pthread_mutex_s::__owner"]
-        [::core::mem::offset_of!(__pthread_mutex_s, __owner) - 8usize];
-    ["Offset of field: __pthread_mutex_s::__nusers"]
-        [::core::mem::offset_of!(__pthread_mutex_s, __nusers) - 12usize];
-    ["Offset of field: __pthread_mutex_s::__kind"]
-        [::core::mem::offset_of!(__pthread_mutex_s, __kind) - 16usize];
-    ["Offset of field: __pthread_mutex_s::__spins"]
-        [::core::mem::offset_of!(__pthread_mutex_s, __spins) - 20usize];
-    ["Offset of field: __pthread_mutex_s::__elision"]
-        [::core::mem::offset_of!(__pthread_mutex_s, __elision) - 22usize];
-    ["Offset of field: __pthread_mutex_s::__list"]
-        [::core::mem::offset_of!(__pthread_mutex_s, __list) - 24usize];
-};
 impl Default for __pthread_mutex_s {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -1921,37 +1516,6 @@ pub struct __pthread_rwlock_arch_t {
     pub __flags: ::core::ffi::c_uint,
     pub __bindgen_padding_0: [u8; 4usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __pthread_rwlock_arch_t"]
-        [::core::mem::size_of::<__pthread_rwlock_arch_t>() - 56usize];
-    ["Alignment of __pthread_rwlock_arch_t"]
-        [::core::mem::align_of::<__pthread_rwlock_arch_t>() - 8usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__readers"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __readers) - 0usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__writers"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __writers) - 4usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__wrphase_futex"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __wrphase_futex) - 8usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__writers_futex"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __writers_futex) - 12usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__pad3"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __pad3) - 16usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__pad4"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __pad4) - 20usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__cur_writer"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __cur_writer) - 24usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__shared"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __shared) - 28usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__rwelision"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __rwelision) - 32usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__pad1"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __pad1) - 33usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__pad2"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __pad2) - 40usize];
-    ["Offset of field: __pthread_rwlock_arch_t::__flags"]
-        [::core::mem::offset_of!(__pthread_rwlock_arch_t, __flags) - 48usize];
-};
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct __pthread_cond_s {
@@ -1963,25 +1527,6 @@ pub struct __pthread_cond_s {
     pub __wrefs: ::core::ffi::c_uint,
     pub __g_signals: [::core::ffi::c_uint; 2usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __pthread_cond_s"][::core::mem::size_of::<__pthread_cond_s>() - 48usize];
-    ["Alignment of __pthread_cond_s"][::core::mem::align_of::<__pthread_cond_s>() - 8usize];
-    ["Offset of field: __pthread_cond_s::__wseq"]
-        [::core::mem::offset_of!(__pthread_cond_s, __wseq) - 0usize];
-    ["Offset of field: __pthread_cond_s::__g1_start"]
-        [::core::mem::offset_of!(__pthread_cond_s, __g1_start) - 8usize];
-    ["Offset of field: __pthread_cond_s::__g_refs"]
-        [::core::mem::offset_of!(__pthread_cond_s, __g_refs) - 16usize];
-    ["Offset of field: __pthread_cond_s::__g_size"]
-        [::core::mem::offset_of!(__pthread_cond_s, __g_size) - 24usize];
-    ["Offset of field: __pthread_cond_s::__g1_orig_size"]
-        [::core::mem::offset_of!(__pthread_cond_s, __g1_orig_size) - 32usize];
-    ["Offset of field: __pthread_cond_s::__wrefs"]
-        [::core::mem::offset_of!(__pthread_cond_s, __wrefs) - 36usize];
-    ["Offset of field: __pthread_cond_s::__g_signals"]
-        [::core::mem::offset_of!(__pthread_cond_s, __g_signals) - 40usize];
-};
 impl Default for __pthread_cond_s {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2003,12 +1548,6 @@ pub type __thrd_t = ::core::ffi::c_ulong;
 pub struct __once_flag {
     pub __data: ::core::ffi::c_int,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __once_flag"][::core::mem::size_of::<__once_flag>() - 4usize];
-    ["Alignment of __once_flag"][::core::mem::align_of::<__once_flag>() - 4usize];
-    ["Offset of field: __once_flag::__data"][::core::mem::offset_of!(__once_flag, __data) - 0usize];
-};
 pub type pthread_t = ::core::ffi::c_ulong;
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -2016,15 +1555,6 @@ pub union pthread_mutexattr_t {
     pub __size: [::core::ffi::c_char; 4usize],
     pub __align: ::core::ffi::c_int,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_mutexattr_t"][::core::mem::size_of::<pthread_mutexattr_t>() - 4usize];
-    ["Alignment of pthread_mutexattr_t"][::core::mem::align_of::<pthread_mutexattr_t>() - 4usize];
-    ["Offset of field: pthread_mutexattr_t::__size"]
-        [::core::mem::offset_of!(pthread_mutexattr_t, __size) - 0usize];
-    ["Offset of field: pthread_mutexattr_t::__align"]
-        [::core::mem::offset_of!(pthread_mutexattr_t, __align) - 0usize];
-};
 impl Default for pthread_mutexattr_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2045,15 +1575,6 @@ pub union pthread_condattr_t {
     pub __size: [::core::ffi::c_char; 4usize],
     pub __align: ::core::ffi::c_int,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_condattr_t"][::core::mem::size_of::<pthread_condattr_t>() - 4usize];
-    ["Alignment of pthread_condattr_t"][::core::mem::align_of::<pthread_condattr_t>() - 4usize];
-    ["Offset of field: pthread_condattr_t::__size"]
-        [::core::mem::offset_of!(pthread_condattr_t, __size) - 0usize];
-    ["Offset of field: pthread_condattr_t::__align"]
-        [::core::mem::offset_of!(pthread_condattr_t, __align) - 0usize];
-};
 impl Default for pthread_condattr_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2076,15 +1597,6 @@ pub union pthread_attr_t {
     pub __size: [::core::ffi::c_char; 56usize],
     pub __align: ::core::ffi::c_long,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_attr_t"][::core::mem::size_of::<pthread_attr_t>() - 56usize];
-    ["Alignment of pthread_attr_t"][::core::mem::align_of::<pthread_attr_t>() - 8usize];
-    ["Offset of field: pthread_attr_t::__size"]
-        [::core::mem::offset_of!(pthread_attr_t, __size) - 0usize];
-    ["Offset of field: pthread_attr_t::__align"]
-        [::core::mem::offset_of!(pthread_attr_t, __align) - 0usize];
-};
 impl Default for pthread_attr_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2106,17 +1618,6 @@ pub union pthread_mutex_t {
     pub __size: [::core::ffi::c_char; 40usize],
     pub __align: ::core::ffi::c_long,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_mutex_t"][::core::mem::size_of::<pthread_mutex_t>() - 40usize];
-    ["Alignment of pthread_mutex_t"][::core::mem::align_of::<pthread_mutex_t>() - 8usize];
-    ["Offset of field: pthread_mutex_t::__data"]
-        [::core::mem::offset_of!(pthread_mutex_t, __data) - 0usize];
-    ["Offset of field: pthread_mutex_t::__size"]
-        [::core::mem::offset_of!(pthread_mutex_t, __size) - 0usize];
-    ["Offset of field: pthread_mutex_t::__align"]
-        [::core::mem::offset_of!(pthread_mutex_t, __align) - 0usize];
-};
 impl Default for pthread_mutex_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2138,17 +1639,6 @@ pub union pthread_cond_t {
     pub __size: [::core::ffi::c_char; 48usize],
     pub __align: ::core::ffi::c_longlong,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_cond_t"][::core::mem::size_of::<pthread_cond_t>() - 48usize];
-    ["Alignment of pthread_cond_t"][::core::mem::align_of::<pthread_cond_t>() - 8usize];
-    ["Offset of field: pthread_cond_t::__data"]
-        [::core::mem::offset_of!(pthread_cond_t, __data) - 0usize];
-    ["Offset of field: pthread_cond_t::__size"]
-        [::core::mem::offset_of!(pthread_cond_t, __size) - 0usize];
-    ["Offset of field: pthread_cond_t::__align"]
-        [::core::mem::offset_of!(pthread_cond_t, __align) - 0usize];
-};
 impl Default for pthread_cond_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2170,17 +1660,6 @@ pub union pthread_rwlock_t {
     pub __size: [::core::ffi::c_char; 56usize],
     pub __align: ::core::ffi::c_long,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_rwlock_t"][::core::mem::size_of::<pthread_rwlock_t>() - 56usize];
-    ["Alignment of pthread_rwlock_t"][::core::mem::align_of::<pthread_rwlock_t>() - 8usize];
-    ["Offset of field: pthread_rwlock_t::__data"]
-        [::core::mem::offset_of!(pthread_rwlock_t, __data) - 0usize];
-    ["Offset of field: pthread_rwlock_t::__size"]
-        [::core::mem::offset_of!(pthread_rwlock_t, __size) - 0usize];
-    ["Offset of field: pthread_rwlock_t::__align"]
-        [::core::mem::offset_of!(pthread_rwlock_t, __align) - 0usize];
-};
 impl Default for pthread_rwlock_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2201,15 +1680,6 @@ pub union pthread_rwlockattr_t {
     pub __size: [::core::ffi::c_char; 8usize],
     pub __align: ::core::ffi::c_long,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_rwlockattr_t"][::core::mem::size_of::<pthread_rwlockattr_t>() - 8usize];
-    ["Alignment of pthread_rwlockattr_t"][::core::mem::align_of::<pthread_rwlockattr_t>() - 8usize];
-    ["Offset of field: pthread_rwlockattr_t::__size"]
-        [::core::mem::offset_of!(pthread_rwlockattr_t, __size) - 0usize];
-    ["Offset of field: pthread_rwlockattr_t::__align"]
-        [::core::mem::offset_of!(pthread_rwlockattr_t, __align) - 0usize];
-};
 impl Default for pthread_rwlockattr_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2231,15 +1701,6 @@ pub union pthread_barrier_t {
     pub __size: [::core::ffi::c_char; 32usize],
     pub __align: ::core::ffi::c_long,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_barrier_t"][::core::mem::size_of::<pthread_barrier_t>() - 32usize];
-    ["Alignment of pthread_barrier_t"][::core::mem::align_of::<pthread_barrier_t>() - 8usize];
-    ["Offset of field: pthread_barrier_t::__size"]
-        [::core::mem::offset_of!(pthread_barrier_t, __size) - 0usize];
-    ["Offset of field: pthread_barrier_t::__align"]
-        [::core::mem::offset_of!(pthread_barrier_t, __align) - 0usize];
-};
 impl Default for pthread_barrier_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2260,16 +1721,6 @@ pub union pthread_barrierattr_t {
     pub __size: [::core::ffi::c_char; 4usize],
     pub __align: ::core::ffi::c_int,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of pthread_barrierattr_t"][::core::mem::size_of::<pthread_barrierattr_t>() - 4usize];
-    ["Alignment of pthread_barrierattr_t"]
-        [::core::mem::align_of::<pthread_barrierattr_t>() - 4usize];
-    ["Offset of field: pthread_barrierattr_t::__size"]
-        [::core::mem::offset_of!(pthread_barrierattr_t, __size) - 0usize];
-    ["Offset of field: pthread_barrierattr_t::__align"]
-        [::core::mem::offset_of!(pthread_barrierattr_t, __align) - 0usize];
-};
 impl Default for pthread_barrierattr_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2290,12 +1741,6 @@ pub type __jmp_buf = [::core::ffi::c_long; 8usize];
 pub struct __sigset_t {
     pub __val: [::core::ffi::c_ulong; 16usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __sigset_t"][::core::mem::size_of::<__sigset_t>() - 128usize];
-    ["Alignment of __sigset_t"][::core::mem::align_of::<__sigset_t>() - 8usize];
-    ["Offset of field: __sigset_t::__val"][::core::mem::offset_of!(__sigset_t, __val) - 0usize];
-};
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone, Hash, PartialOrd, Ord, PartialEq, Eq)]
 pub struct __jmp_buf_tag {
@@ -2304,17 +1749,6 @@ pub struct __jmp_buf_tag {
     pub __bindgen_padding_0: [u8; 4usize],
     pub __saved_mask: __sigset_t,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __jmp_buf_tag"][::core::mem::size_of::<__jmp_buf_tag>() - 200usize];
-    ["Alignment of __jmp_buf_tag"][::core::mem::align_of::<__jmp_buf_tag>() - 8usize];
-    ["Offset of field: __jmp_buf_tag::__jmpbuf"]
-        [::core::mem::offset_of!(__jmp_buf_tag, __jmpbuf) - 0usize];
-    ["Offset of field: __jmp_buf_tag::__mask_was_saved"]
-        [::core::mem::offset_of!(__jmp_buf_tag, __mask_was_saved) - 64usize];
-    ["Offset of field: __jmp_buf_tag::__saved_mask"]
-        [::core::mem::offset_of!(__jmp_buf_tag, __saved_mask) - 72usize];
-};
 pub const PTHREAD_CREATE_JOINABLE: _bindgen_ty_1 = _bindgen_ty_1::PTHREAD_CREATE_JOINABLE;
 pub const PTHREAD_CREATE_DETACHED: _bindgen_ty_1 = _bindgen_ty_1::PTHREAD_CREATE_DETACHED;
 #[repr(u32)]
@@ -2406,21 +1840,6 @@ pub struct _pthread_cleanup_buffer {
     pub __bindgen_padding_0: [u8; 4usize],
     pub __prev: *mut _pthread_cleanup_buffer,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of _pthread_cleanup_buffer"]
-        [::core::mem::size_of::<_pthread_cleanup_buffer>() - 32usize];
-    ["Alignment of _pthread_cleanup_buffer"]
-        [::core::mem::align_of::<_pthread_cleanup_buffer>() - 8usize];
-    ["Offset of field: _pthread_cleanup_buffer::__routine"]
-        [::core::mem::offset_of!(_pthread_cleanup_buffer, __routine) - 0usize];
-    ["Offset of field: _pthread_cleanup_buffer::__arg"]
-        [::core::mem::offset_of!(_pthread_cleanup_buffer, __arg) - 8usize];
-    ["Offset of field: _pthread_cleanup_buffer::__canceltype"]
-        [::core::mem::offset_of!(_pthread_cleanup_buffer, __canceltype) - 16usize];
-    ["Offset of field: _pthread_cleanup_buffer::__prev"]
-        [::core::mem::offset_of!(_pthread_cleanup_buffer, __prev) - 24usize];
-};
 impl Default for _pthread_cleanup_buffer {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2641,31 +2060,12 @@ pub struct __cancel_jmp_buf_tag {
     pub __mask_was_saved: ::core::ffi::c_int,
     pub __bindgen_padding_0: [u8; 4usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __cancel_jmp_buf_tag"][::core::mem::size_of::<__cancel_jmp_buf_tag>() - 72usize];
-    ["Alignment of __cancel_jmp_buf_tag"][::core::mem::align_of::<__cancel_jmp_buf_tag>() - 8usize];
-    ["Offset of field: __cancel_jmp_buf_tag::__cancel_jmp_buf"]
-        [::core::mem::offset_of!(__cancel_jmp_buf_tag, __cancel_jmp_buf) - 0usize];
-    ["Offset of field: __cancel_jmp_buf_tag::__mask_was_saved"]
-        [::core::mem::offset_of!(__cancel_jmp_buf_tag, __mask_was_saved) - 64usize];
-};
 #[repr(C)]
 #[derive(Debug, Copy, Clone, Hash, PartialOrd, Ord, PartialEq, Eq)]
 pub struct __pthread_unwind_buf_t {
     pub __cancel_jmp_buf: [__cancel_jmp_buf_tag; 1usize],
     pub __pad: [*mut ::core::ffi::c_void; 4usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __pthread_unwind_buf_t"][::core::mem::size_of::<__pthread_unwind_buf_t>() - 104usize];
-    ["Alignment of __pthread_unwind_buf_t"]
-        [::core::mem::align_of::<__pthread_unwind_buf_t>() - 8usize];
-    ["Offset of field: __pthread_unwind_buf_t::__cancel_jmp_buf"]
-        [::core::mem::offset_of!(__pthread_unwind_buf_t, __cancel_jmp_buf) - 0usize];
-    ["Offset of field: __pthread_unwind_buf_t::__pad"]
-        [::core::mem::offset_of!(__pthread_unwind_buf_t, __pad) - 72usize];
-};
 impl Default for __pthread_unwind_buf_t {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -2684,21 +2084,6 @@ pub struct __pthread_cleanup_frame {
     pub __do_it: ::core::ffi::c_int,
     pub __cancel_type: ::core::ffi::c_int,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of __pthread_cleanup_frame"]
-        [::core::mem::size_of::<__pthread_cleanup_frame>() - 24usize];
-    ["Alignment of __pthread_cleanup_frame"]
-        [::core::mem::align_of::<__pthread_cleanup_frame>() - 8usize];
-    ["Offset of field: __pthread_cleanup_frame::__cancel_routine"]
-        [::core::mem::offset_of!(__pthread_cleanup_frame, __cancel_routine) - 0usize];
-    ["Offset of field: __pthread_cleanup_frame::__cancel_arg"]
-        [::core::mem::offset_of!(__pthread_cleanup_frame, __cancel_arg) - 8usize];
-    ["Offset of field: __pthread_cleanup_frame::__do_it"]
-        [::core::mem::offset_of!(__pthread_cleanup_frame, __do_it) - 16usize];
-    ["Offset of field: __pthread_cleanup_frame::__cancel_type"]
-        [::core::mem::offset_of!(__pthread_cleanup_frame, __cancel_type) - 20usize];
-};
 impl Default for __pthread_cleanup_frame {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -3042,13 +2427,6 @@ pub struct CThread {
     pub _created: ::core::ffi::c_int,
     pub __bindgen_padding_0: [u8; 4usize],
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CThread"][::core::mem::size_of::<CThread>() - 16usize];
-    ["Alignment of CThread"][::core::mem::align_of::<CThread>() - 8usize];
-    ["Offset of field: CThread::_tid"][::core::mem::offset_of!(CThread, _tid) - 0usize];
-    ["Offset of field: CThread::_created"][::core::mem::offset_of!(CThread, _created) - 8usize];
-};
 unsafe extern "C" {
     pub fn Thread_Close(p: *mut CThread) -> WRes;
 }
@@ -3090,17 +2468,6 @@ pub struct CEvent {
     pub _mutex: pthread_mutex_t,
     pub _cond: pthread_cond_t,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CEvent"][::core::mem::size_of::<CEvent>() - 104usize];
-    ["Alignment of CEvent"][::core::mem::align_of::<CEvent>() - 8usize];
-    ["Offset of field: CEvent::_created"][::core::mem::offset_of!(CEvent, _created) - 0usize];
-    ["Offset of field: CEvent::_manual_reset"]
-        [::core::mem::offset_of!(CEvent, _manual_reset) - 4usize];
-    ["Offset of field: CEvent::_state"][::core::mem::offset_of!(CEvent, _state) - 8usize];
-    ["Offset of field: CEvent::_mutex"][::core::mem::offset_of!(CEvent, _mutex) - 16usize];
-    ["Offset of field: CEvent::_cond"][::core::mem::offset_of!(CEvent, _cond) - 56usize];
-};
 impl Default for CEvent {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -3152,18 +2519,6 @@ pub struct CSemaphore {
     pub _mutex: pthread_mutex_t,
     pub _cond: pthread_cond_t,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CSemaphore"][::core::mem::size_of::<CSemaphore>() - 104usize];
-    ["Alignment of CSemaphore"][::core::mem::align_of::<CSemaphore>() - 8usize];
-    ["Offset of field: CSemaphore::_created"]
-        [::core::mem::offset_of!(CSemaphore, _created) - 0usize];
-    ["Offset of field: CSemaphore::_count"][::core::mem::offset_of!(CSemaphore, _count) - 4usize];
-    ["Offset of field: CSemaphore::_maxCount"]
-        [::core::mem::offset_of!(CSemaphore, _maxCount) - 8usize];
-    ["Offset of field: CSemaphore::_mutex"][::core::mem::offset_of!(CSemaphore, _mutex) - 16usize];
-    ["Offset of field: CSemaphore::_cond"][::core::mem::offset_of!(CSemaphore, _cond) - 56usize];
-};
 impl Default for CSemaphore {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -3199,13 +2554,6 @@ unsafe extern "C" {
 pub struct CCriticalSection {
     pub _mutex: pthread_mutex_t,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CCriticalSection"][::core::mem::size_of::<CCriticalSection>() - 40usize];
-    ["Alignment of CCriticalSection"][::core::mem::align_of::<CCriticalSection>() - 8usize];
-    ["Offset of field: CCriticalSection::_mutex"]
-        [::core::mem::offset_of!(CCriticalSection, _mutex) - 0usize];
-};
 impl Default for CCriticalSection {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -3260,33 +2608,6 @@ pub struct CMtSync {
     pub filledSemaphore: CSemaphore,
     pub cs: CCriticalSection,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CMtSync"][::core::mem::size_of::<CMtSync>() - 512usize];
-    ["Alignment of CMtSync"][::core::mem::align_of::<CMtSync>() - 8usize];
-    ["Offset of field: CMtSync::numProcessedBlocks"]
-        [::core::mem::offset_of!(CMtSync, numProcessedBlocks) - 0usize];
-    ["Offset of field: CMtSync::thread"][::core::mem::offset_of!(CMtSync, thread) - 8usize];
-    ["Offset of field: CMtSync::affinity"][::core::mem::offset_of!(CMtSync, affinity) - 24usize];
-    ["Offset of field: CMtSync::wasCreated"]
-        [::core::mem::offset_of!(CMtSync, wasCreated) - 32usize];
-    ["Offset of field: CMtSync::needStart"][::core::mem::offset_of!(CMtSync, needStart) - 36usize];
-    ["Offset of field: CMtSync::csWasInitialized"]
-        [::core::mem::offset_of!(CMtSync, csWasInitialized) - 40usize];
-    ["Offset of field: CMtSync::csWasEntered"]
-        [::core::mem::offset_of!(CMtSync, csWasEntered) - 44usize];
-    ["Offset of field: CMtSync::exit"][::core::mem::offset_of!(CMtSync, exit) - 48usize];
-    ["Offset of field: CMtSync::stopWriting"]
-        [::core::mem::offset_of!(CMtSync, stopWriting) - 52usize];
-    ["Offset of field: CMtSync::canStart"][::core::mem::offset_of!(CMtSync, canStart) - 56usize];
-    ["Offset of field: CMtSync::wasStopped"]
-        [::core::mem::offset_of!(CMtSync, wasStopped) - 160usize];
-    ["Offset of field: CMtSync::freeSemaphore"]
-        [::core::mem::offset_of!(CMtSync, freeSemaphore) - 264usize];
-    ["Offset of field: CMtSync::filledSemaphore"]
-        [::core::mem::offset_of!(CMtSync, filledSemaphore) - 368usize];
-    ["Offset of field: CMtSync::cs"][::core::mem::offset_of!(CMtSync, cs) - 472usize];
-};
 impl Default for CMtSync {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
@@ -3356,73 +2677,6 @@ pub struct CMatchFinderMt_ {
     pub GetHeadsFunc: Mf_GetHeads,
     pub MatchFinder: *mut CMatchFinder,
 }
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of CMatchFinderMt_"][::core::mem::size_of::<CMatchFinderMt_>() - 1320usize];
-    ["Alignment of CMatchFinderMt_"][::core::mem::align_of::<CMatchFinderMt_>() - 8usize];
-    ["Offset of field: CMatchFinderMt_::pointerToCurPos"]
-        [::core::mem::offset_of!(CMatchFinderMt_, pointerToCurPos) - 0usize];
-    ["Offset of field: CMatchFinderMt_::btBuf"]
-        [::core::mem::offset_of!(CMatchFinderMt_, btBuf) - 8usize];
-    ["Offset of field: CMatchFinderMt_::btBufPos"]
-        [::core::mem::offset_of!(CMatchFinderMt_, btBufPos) - 16usize];
-    ["Offset of field: CMatchFinderMt_::btBufPosLimit"]
-        [::core::mem::offset_of!(CMatchFinderMt_, btBufPosLimit) - 24usize];
-    ["Offset of field: CMatchFinderMt_::lzPos"]
-        [::core::mem::offset_of!(CMatchFinderMt_, lzPos) - 32usize];
-    ["Offset of field: CMatchFinderMt_::btNumAvailBytes"]
-        [::core::mem::offset_of!(CMatchFinderMt_, btNumAvailBytes) - 36usize];
-    ["Offset of field: CMatchFinderMt_::hash"]
-        [::core::mem::offset_of!(CMatchFinderMt_, hash) - 40usize];
-    ["Offset of field: CMatchFinderMt_::fixedHashSize"]
-        [::core::mem::offset_of!(CMatchFinderMt_, fixedHashSize) - 48usize];
-    ["Offset of field: CMatchFinderMt_::historySize"]
-        [::core::mem::offset_of!(CMatchFinderMt_, historySize) - 52usize];
-    ["Offset of field: CMatchFinderMt_::crc"]
-        [::core::mem::offset_of!(CMatchFinderMt_, crc) - 56usize];
-    ["Offset of field: CMatchFinderMt_::MixMatchesFunc"]
-        [::core::mem::offset_of!(CMatchFinderMt_, MixMatchesFunc) - 64usize];
-    ["Offset of field: CMatchFinderMt_::failure_LZ_BT"]
-        [::core::mem::offset_of!(CMatchFinderMt_, failure_LZ_BT) - 72usize];
-    ["Offset of field: CMatchFinderMt_::failureBuf"]
-        [::core::mem::offset_of!(CMatchFinderMt_, failureBuf) - 76usize];
-    ["Offset of field: CMatchFinderMt_::btSync"]
-        [::core::mem::offset_of!(CMatchFinderMt_, btSync) - 80usize];
-    ["Offset of field: CMatchFinderMt_::btDummy"]
-        [::core::mem::offset_of!(CMatchFinderMt_, btDummy) - 592usize];
-    ["Offset of field: CMatchFinderMt_::hashBuf"]
-        [::core::mem::offset_of!(CMatchFinderMt_, hashBuf) - 720usize];
-    ["Offset of field: CMatchFinderMt_::hashBufPos"]
-        [::core::mem::offset_of!(CMatchFinderMt_, hashBufPos) - 728usize];
-    ["Offset of field: CMatchFinderMt_::hashBufPosLimit"]
-        [::core::mem::offset_of!(CMatchFinderMt_, hashBufPosLimit) - 732usize];
-    ["Offset of field: CMatchFinderMt_::hashNumAvail"]
-        [::core::mem::offset_of!(CMatchFinderMt_, hashNumAvail) - 736usize];
-    ["Offset of field: CMatchFinderMt_::failure_BT"]
-        [::core::mem::offset_of!(CMatchFinderMt_, failure_BT) - 740usize];
-    ["Offset of field: CMatchFinderMt_::son"]
-        [::core::mem::offset_of!(CMatchFinderMt_, son) - 744usize];
-    ["Offset of field: CMatchFinderMt_::matchMaxLen"]
-        [::core::mem::offset_of!(CMatchFinderMt_, matchMaxLen) - 752usize];
-    ["Offset of field: CMatchFinderMt_::numHashBytes"]
-        [::core::mem::offset_of!(CMatchFinderMt_, numHashBytes) - 756usize];
-    ["Offset of field: CMatchFinderMt_::pos"]
-        [::core::mem::offset_of!(CMatchFinderMt_, pos) - 760usize];
-    ["Offset of field: CMatchFinderMt_::buffer"]
-        [::core::mem::offset_of!(CMatchFinderMt_, buffer) - 768usize];
-    ["Offset of field: CMatchFinderMt_::cyclicBufferPos"]
-        [::core::mem::offset_of!(CMatchFinderMt_, cyclicBufferPos) - 776usize];
-    ["Offset of field: CMatchFinderMt_::cyclicBufferSize"]
-        [::core::mem::offset_of!(CMatchFinderMt_, cyclicBufferSize) - 780usize];
-    ["Offset of field: CMatchFinderMt_::cutValue"]
-        [::core::mem::offset_of!(CMatchFinderMt_, cutValue) - 784usize];
-    ["Offset of field: CMatchFinderMt_::hashSync"]
-        [::core::mem::offset_of!(CMatchFinderMt_, hashSync) - 792usize];
-    ["Offset of field: CMatchFinderMt_::GetHeadsFunc"]
-        [::core::mem::offset_of!(CMatchFinderMt_, GetHeadsFunc) - 1304usize];
-    ["Offset of field: CMatchFinderMt_::MatchFinder"]
-        [::core::mem::offset_of!(CMatchFinderMt_, MatchFinder) - 1312usize];
-};
 impl Default for CMatchFinderMt_ {
     fn default() -> Self {
         let mut s = ::core::mem::MaybeUninit::<Self>::uninit();
