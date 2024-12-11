@@ -203,6 +203,8 @@ The optimized assembly routines have been tested on hardware:
 - x86_64 Linux (GCC)
 - i686 Windows (MSVC)
 - x86_64 Windows (MSVC)
+- i686 Windows (GNU)
+- x86_64 Windows (GNU)
 
 And on emulator or hypervisor:
 
