@@ -206,6 +206,7 @@ And on emulator or hypervisor:
 
 - aarch64 Linux
 - aarch64 macOS
+- x86_64 macOS
 
 And a few more platforms may be tested in CI.
 These however have not been hand checked; all I know is 'they compile, and pass a basic sanity check'.

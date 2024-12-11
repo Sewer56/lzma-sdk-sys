@@ -62,6 +62,19 @@ uasm -coff -DABI_WINDOWS -DABI_CDECL Sha256Opt.asm
 No action is needed here, the assembly written there is supported by gcc/clang, and will be
 correctly built by the Rust build script.
 
+## Apple x64 (64-bit Mach-O)
+
+```bash
+uasm -macho64 -DABI_LINUX 7zCrcOpt.asm
+uasm -macho64 -DABI_LINUX XzCrc64Opt.asm
+uasm -macho64 -DABI_LINUX AesOpt.asm
+uasm -macho64 -DABI_LINUX Sha1Opt.asm
+uasm -macho64 -DABI_LINUX Sha256Opt.asm
+uasm -macho64 -DABI_LINUX LzmaDecOpt.asm
+```
+
+`DABI_LINUX` is not a typo here.
+
 ### Notes
 
 - These commands assume all .asm files are in the current directory

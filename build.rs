@@ -44,8 +44,7 @@ impl PlatformInfo {
     }
 
     fn supports_decompression_acceleration(&self) -> bool {
-        let not_apple_x64 = !(self.is_macos && self.is_x64);
-        (self.is_x64 || self.is_arm64) && not_apple_x64
+        self.is_x64 || self.is_arm64
     }
 }
 
@@ -341,7 +340,7 @@ fn prefer_clang(build: &mut cc::Build) {
 
 fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(), Box<dyn std::error::Error>> {
     // Only add ASM files if enabled
-    if !env::var("CARGO_FEATURE_ENABLE_ASM").is_ok() {
+    if !env::var("CARGO_FEATURE_ENABLE_ASM").is_ok() || !build_info.supports_decompression_acceleration() {
         return Ok(());
     }
 
@@ -355,7 +354,14 @@ fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(),
         let obj_dir = if build_info.is_windows {
             if build_info.is_x64 { "precompiled-asm/x86/win-x64" }
             else { "precompiled-asm/x86/win-x86" }
-        } else { // ELF. Unixes. Including Apple, Android, etc.
+        } else if build_info.is_macos {
+            if build_info.is_x64 { "precompiled-asm/x86/apple-x64" }
+            else { 
+                println!("cargo:warning='enable-asm' feature is not supported for this macOS architecture");
+                panic!("'enable-asm' feature is not supported for this macOS architecture")
+            }
+        }
+        else { // ELF. Unixes. Including Apple, Android, etc.
             if build_info.is_x64 { "precompiled-asm/x86/linux-x64" }
             else { "precompiled-asm/x86/linux-x86" }
         };
