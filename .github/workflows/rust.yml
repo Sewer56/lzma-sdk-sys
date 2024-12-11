@@ -14,33 +14,38 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-            use-cross: false
-          - os: ubuntu-latest
-            target: i686-unknown-linux-gnu
-            use-cross: false
-          - os: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-            use-cross: true
-          - os: ubuntu-latest
-            target: armv7-unknown-linux-gnueabihf
-            use-cross: true
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            use-cross: false
-          - os: windows-latest
-            target: i686-pc-windows-msvc
-            use-cross: false
-          - os: windows-latest
-            target: aarch64-pc-windows-msvc
-            use-cross: false
-          - os: macos-13 # x86
-            target: x86_64-apple-darwin
-            use-cross: false
-          - os: macos-14 # M1
-            target: aarch64-apple-darwin
-            use-cross: false
+          # Multithreaded, no ASM
+          - { os: ubuntu-latest, target: x86_64-unknown-linux-gnu, use-cross: false, features: "std,external-codecs" }
+          - { os: ubuntu-latest, target: i686-unknown-linux-gnu, use-cross: false, features: "std,external-codecs" }
+          - { os: ubuntu-latest, target: aarch64-unknown-linux-gnu, use-cross: true, features: "std,external-codecs" }
+          - { os: ubuntu-latest, target: armv7-unknown-linux-gnueabihf, use-cross: true, features: "std,external-codecs" }
+          - { os: windows-latest, target: x86_64-pc-windows-msvc, use-cross: false, features: "std,external-codecs" }
+          - { os: windows-latest, target: i686-pc-windows-msvc, use-cross: false, features: "std,external-codecs" }
+          - { os: windows-latest, target: aarch64-pc-windows-msvc, use-cross: false, features: "std,external-codecs" }
+          - { os: macos-13, target: x86_64-apple-darwin, use-cross: false, features: "std,external-codecs" }
+          - { os: macos-14, target: aarch64-apple-darwin, use-cross: false, features: "std,external-codecs" }
+
+          # Multithreaded, with ASM
+          - { os: ubuntu-latest, target: x86_64-unknown-linux-gnu, use-cross: false, features: "std,external-codecs,enable-asm" }
+          - { os: ubuntu-latest, target: i686-unknown-linux-gnu, use-cross: false, features: "std,external-codecs,enable-asm" }
+          - { os: ubuntu-latest, target: aarch64-unknown-linux-gnu, use-cross: true, features: "std,external-codecs,enable-asm" }
+          - { os: ubuntu-latest, target: armv7-unknown-linux-gnueabihf, use-cross: true, features: "std,external-codecs,enable-asm" }
+          - { os: windows-latest, target: x86_64-pc-windows-msvc, use-cross: false, features: "std,external-codecs,enable-asm" }
+          - { os: windows-latest, target: i686-pc-windows-msvc, use-cross: false, features: "std,external-codecs,enable-asm" }
+          - { os: windows-latest, target: aarch64-pc-windows-msvc, use-cross: false, features: "std,external-codecs,enable-asm" }
+          - { os: macos-13, target: x86_64-apple-darwin, use-cross: false, features: "std,external-codecs,enable-asm" }
+          - { os: macos-14, target: aarch64-apple-darwin, use-cross: false, features: "std,external-codecs,enable-asm" }
+
+          # Singlethreaded
+          - { os: ubuntu-latest, target: x86_64-unknown-linux-gnu, use-cross: false, features: "std,external-codecs,st" }
+          - { os: ubuntu-latest, target: i686-unknown-linux-gnu, use-cross: false, features: "std,external-codecs,st" }
+          - { os: ubuntu-latest, target: aarch64-unknown-linux-gnu, use-cross: true, features: "std,external-codecs,st" }
+          - { os: ubuntu-latest, target: armv7-unknown-linux-gnueabihf, use-cross: true, features: "std,external-codecs,st" }
+          - { os: windows-latest, target: x86_64-pc-windows-msvc, use-cross: false, features: "std,external-codecs,st" }
+          - { os: windows-latest, target: i686-pc-windows-msvc, use-cross: false, features: "std,external-codecs,st" }
+          - { os: windows-latest, target: aarch64-pc-windows-msvc, use-cross: false, features: "std,external-codecs,st" }
+          - { os: macos-13, target: x86_64-apple-darwin, use-cross: false, features: "std,external-codecs,st" }
+          - { os: macos-14, target: aarch64-apple-darwin, use-cross: false, features: "std,external-codecs,st" }
 
     runs-on: ${{ matrix.os }}
 
@@ -59,7 +64,8 @@ jobs:
           codecov-token: ${{ secrets.CODECOV_TOKEN }}
           target: ${{ matrix.target }}
           use-cross: ${{ matrix.use-cross }}
-          features: "default"
+          features: ${{ matrix.features }}
+          no-default-features: true
 
       # Note: The GitHub Runner Images will contain an up to date Rust Stable Toolchain
       #       thus as per recommendation of cargo-semver-checks, we're using stable here.

@@ -206,6 +206,8 @@ And on emulator or hypervisor:
 
 - aarch64 Linux
 - aarch64 macOS
+- x86_64 macOS
+- armv7 Linux
 
 While other platforms may work (CI tests pass), they haven't been extensively verified on actual hardware.
 
