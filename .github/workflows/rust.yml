@@ -1,0 +1,96 @@
+name: Test, Upload Coverage and Release Rust
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - '*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            use-cross: false
+          - os: ubuntu-latest
+            target: i686-unknown-linux-gnu
+            use-cross: false
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            use-cross: true
+          - os: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+            use-cross: true
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            use-cross: false
+          - os: windows-latest
+            target: i686-pc-windows-msvc
+            use-cross: false
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
+            use-cross: false
+          - os: macos-13 # x86
+            target: x86_64-apple-darwin
+            use-cross: false
+          - os: macos-14 # M1
+            target: aarch64-apple-darwin
+            use-cross: false
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Run Tests and Upload Coverage
+        uses: Reloaded-Project/devops-rust-test-and-coverage@v1
+        # Currently unsupported due to no native runner.
+        # Native runner currently only available in enterprise.
+        if: matrix.target != 'aarch64-pc-windows-msvc'
+        with:
+          upload-coverage: true
+          codecov-token: ${{ secrets.CODECOV_TOKEN }}
+          target: ${{ matrix.target }}
+          use-cross: ${{ matrix.use-cross }}
+          features: "default"
+
+      # Note: The GitHub Runner Images will contain an up to date Rust Stable Toolchain
+      #       thus as per recommendation of cargo-semver-checks, we're using stable here.
+      #
+      # Note to reader. If adding this to a new repo, please clear cache.
+      - name: Run cargo-semver-checks
+        if: github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/')
+        shell: bash
+        run: |
+          SEARCH_RESULT=$(cargo search "^lzma-sdk-sys$" --limit 1)
+
+          if echo "$SEARCH_RESULT" | grep -q "^lzma-sdk-sys "; then
+            rustup target add ${{ matrix.target }}
+            cargo install cargo-semver-checks
+            cargo semver-checks --target ${{ matrix.target }} 
+          else
+              echo "No previous version found on crates.io. Skipping semver checks."
+          fi
+
+  publish-crate:
+    permissions:
+      contents: write
+
+    needs: [build-and-test]
+    # Publish only on tags
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish Rust Crate and Artifacts  
+        uses: Reloaded-Project/devops-publish-action@v1
+        with:
+          crates-io-token: ${{ secrets.CRATES_IO_TOKEN }}
+          rust-project-paths: |
+            .

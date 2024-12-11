@@ -193,12 +193,19 @@ decompressing the `COPYING` file from the 7z distribution:
 
 Tested on a Ryzen 5900X
 
-### Platform Support [WIP: Adding CI Tests Soon]
+### Platform Support
 
-The optimized assembly routines have been tested on:
+The optimized assembly routines have been tested on hardware:
 
 - i686 Linux
 - x86_64 Linux
+- i686 Linux
+- x86_64 Linux
+
+And on emulator or hypervisor:
+
+- aarch64 Linux
+- aarch64 macOS
 
 While other platforms may work (CI tests pass), they haven't been extensively verified on actual hardware.
 
