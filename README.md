@@ -197,18 +197,24 @@ Tested on a Ryzen 5900X
 
 The optimized assembly routines have been tested on hardware:
 
-- i686 Linux
-- x86_64 Linux
-- i686 Linux
-- x86_64 Linux
+- i686 Linux (Clang)
+- x86_64 Linux (Clang)
+- i686 Linux (GCC)
+- x86_64 Linux (GCC)
+- i686 Windows (MSVC)
+- x86_64 Windows (MSVC)
 
 And on emulator or hypervisor:
 
-- aarch64 Linux
+- aarch64 Linux (Clang)
+- aarch64 Linux (GCC)
 - aarch64 macOS
-- x86_64 macOS
 
-And a few more platforms may be tested in CI.
+The following fail to compile with the optimized assembly routines and are disabled in `build.rs`:
+
+- x86_64 macOS (hard to diagnose, as I don't have the hardware.)
+
+And a few more platforms are also tested in CI.
 These however have not been hand checked; all I know is 'they compile, and pass a basic sanity check'.
 
 ## Building

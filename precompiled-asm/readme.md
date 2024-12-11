@@ -75,6 +75,17 @@ uasm -macho64 -DABI_LINUX LzmaDecOpt.asm
 
 `DABI_LINUX` is not a typo here.
 
+This one was complex, compiler does not like UASM output:
+
+```
+cargo:warning=/Applications/Xcode_15.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/runner/work/lzma-sdk-sys/lzma-sdk-sys/target/x86_64-apple-darwin/debug/build/lzma-sdk-sys-6e4ba5a1833852f6/out/lib7zip.a(LzmaDecOpt.o) malformed object (symbol 0 must not have NO_SECT for its n_sect field given its type (N_SECT))
+cargo:warning=/Applications/Xcode_15.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/runner/work/lzma-sdk-sys/lzma-sdk-sys/target/x86_64-apple-darwin/debug/build/lzma-sdk-sys-6e4ba5a1833852f6/out/lib7zip.a(LzmaDecOpt.o) malformed object (symbol 1 must not have NO_SECT for its n_sect field given its type (N_SECT))
+cargo:warning=/Applications/Xcode_15.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: file: /Users/runner/work/lzma-sdk-sys/lzma-sdk-sys/target/x86_64-apple-darwin/debug/build/lzma-sdk-sys-6e4ba5a1833852f6/out/lib7zip.a(LzmaDecOpt.o) malformed object (symbol 2 must not have NO_SECT for its n_sect field given its type (N_SECT))
+cargo:warning=/Applications/Xcode_15.2.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar: internal ranlib command failed
+```
+
+I've tried some more things, but was unable to get it working.
+
 ### Notes
 
 - These commands assume all .asm files are in the current directory

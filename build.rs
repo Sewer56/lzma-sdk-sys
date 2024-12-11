@@ -44,7 +44,8 @@ impl PlatformInfo {
     }
 
     fn supports_decompression_acceleration(&self) -> bool {
-        self.is_x64 || self.is_arm64
+        let not_apple_x64 = !(self.is_macos && self.is_x64);
+        (self.is_x64 || self.is_arm64) && not_apple_x64
     }
 }
 
