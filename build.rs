@@ -42,6 +42,11 @@ impl PlatformInfo {
             is_msvc: compiler.is_like_msvc(),
         }
     }
+
+    fn supports_decompression_acceleration(&self) -> bool {
+        let not_apple_x64 = !(self.is_macos && self.is_x64);
+        (self.is_x64 || self.is_arm64) && not_apple_x64
+    }
 }
 
 fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
@@ -183,8 +188,7 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
 
                 endif
             */
-
-            if is_x64 || is_arm64 {
+            if info.supports_decompression_acceleration() {
                 defines.insert("Z7_LZMA_DEC_OPT", Define {
                     value: Some("1".to_owned()),
                     comment: "Enable assembly optimizations".into(),
@@ -351,7 +355,7 @@ fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(),
         let obj_dir = if build_info.is_windows {
             if build_info.is_x64 { "precompiled-asm/x86/win-x64" }
             else { "precompiled-asm/x86/win-x86" }
-        } else {
+        } else { // ELF. Unixes. Including Apple, Android, etc.
             if build_info.is_x64 { "precompiled-asm/x86/linux-x64" }
             else { "precompiled-asm/x86/linux-x86" }
         };
