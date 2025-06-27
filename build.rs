@@ -1,4 +1,4 @@
-use std::{collections::HashMap, env, fs, path::{Path, PathBuf}, process::Command};
+use std::{collections::{HashMap, HashSet}, env, fs, path::{Path, PathBuf}, process::Command};
 #[allow(deprecated)] // doing the suggestion
 use bindgen::CargoCallbacks;
 use regex::Regex;
@@ -252,7 +252,7 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
 fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
     let content = fs::read_to_string(wrapper_path)?;
     let include_re = Regex::new(r#"#include\s+"7z/C/([^"]+)\.(h|c)""#)?;
-    let mut sources = Vec::new();
+    let mut sources = HashSet::new();
     
     for cap in include_re.captures_iter(&content) {
         let file_name = cap.get(1).unwrap().as_str();
@@ -260,7 +260,7 @@ fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box
         // For both .h and .c includes, look for the corresponding .c file
         let source = format!("7z/C/{file_name}.c");
         if Path::new(&source).exists() {
-            sources.push(source);
+            sources.insert(source);
         }
     }
 
@@ -293,7 +293,7 @@ fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box
         endif
     */
     
-    Ok(sources)
+    Ok(sources.into_iter().collect())
 }
 
 /// This function would find the first flag in `flags` that is supported
