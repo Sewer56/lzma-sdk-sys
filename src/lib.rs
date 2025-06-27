@@ -1,8 +1,11 @@
 #![doc = include_str!("../README.md")]
-#![cfg_attr(not(feature = "std"), no_std)]
+#![no_std]
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
 #![allow(non_snake_case)]
+
+#[cfg(feature = "std")]
+extern crate std;
 
 use core::ffi::c_void;
 
@@ -31,8 +34,8 @@ impl Default for Allocator {
     }
 }
 
-impl Allocator {
-    pub fn as_ref(&self) -> &ISzAlloc {
+impl AsRef<ISzAlloc> for Allocator {
+    fn as_ref(&self) -> &ISzAlloc {
         &self.alloc
     }
 }
@@ -84,6 +87,7 @@ pub unsafe extern "C" fn LzmaEncode_Out(
 mod tests {
     use super::*;
     use std::ptr;
+    use alloc::vec;
 
     #[test]
     fn test_lzma_round_trip() {
