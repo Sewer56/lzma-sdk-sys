@@ -74,7 +74,7 @@ jobs:
         # Native runner currently only available in enterprise.
         if: matrix.target != 'aarch64-pc-windows-msvc'
         with:
-          upload-coverage: true
+          upload-coverage: false
           codecov-token: ${{ secrets.CODECOV_TOKEN }}
           target: ${{ matrix.target }}
           use-cross: ${{ matrix.use-cross }}
@@ -94,7 +94,8 @@ jobs:
 
           if echo "$SEARCH_RESULT" | grep -q "^lzma-sdk-sys "; then
             rustup target add ${{ matrix.target }}
-            cargo install cargo-semver-checks
+            # binstall is installed in devops-rust-test-and-coverage
+            cargo binstall cargo-semver-checks
             cargo semver-checks --target ${{ matrix.target }} 
           else
               echo "No previous version found on crates.io. Skipping semver checks."
