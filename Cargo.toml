@@ -52,7 +52,7 @@ libc = "0.2"
 criterion = "0.5"
 
 [build-dependencies]
-bindgen = "0.71.1"
+bindgen = "0.72.0"
 cc = "1.0"
 glob = "0.3"
 regex = "1.11"
