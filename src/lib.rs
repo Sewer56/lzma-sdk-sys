@@ -34,8 +34,8 @@ impl Default for Allocator {
     }
 }
 
-impl Allocator {
-    pub fn as_ref(&self) -> &ISzAlloc {
+impl AsRef<ISzAlloc> for Allocator {
+    fn as_ref(&self) -> &ISzAlloc {
         &self.alloc
     }
 }

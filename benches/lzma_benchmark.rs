@@ -68,7 +68,7 @@ fn decompress_data(compressed: &[u8], props: &[u8], original_size: usize) -> Vec
             compressed.as_ptr() as *const Byte,
             &mut source_len,
             props.as_ptr() as *const Byte,
-            LZMA_PROPS_SIZE as u32,
+            LZMA_PROPS_SIZE,
             ELzmaFinishMode::LZMA_FINISH_END,
             &mut status,
             alloc.as_ref(),

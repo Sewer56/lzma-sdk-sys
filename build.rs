@@ -248,7 +248,7 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
 ///
 /// # Returns
 /// * `Result<Vec<String>>` - A vector of existing source file paths on success
-///                          or an error if file reading or regex compilation fails
+///   or an error if file reading or regex compilation fails
 fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
     let content = fs::read_to_string(wrapper_path)?;
     let include_re = Regex::new(r#"#include\s+"7z/C/([^"]+)\.(h|c)""#)?;
@@ -256,18 +256,11 @@ fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box
     
     for cap in include_re.captures_iter(&content) {
         let file_name = cap.get(1).unwrap().as_str();
-        let extension = cap.get(2).unwrap().as_str();
         
-        if extension == "c" {
-            let source = format!("7z/C/{}.c", file_name);
-            if Path::new(&source).exists() {
-                sources.push(source);
-            }
-        } else {
-            let source = format!("7z/C/{}.c", file_name);
-            if Path::new(&source).exists() {
-                sources.push(source);
-            }
+        // For both .h and .c includes, look for the corresponding .c file
+        let source = format!("7z/C/{file_name}.c");
+        if Path::new(&source).exists() {
+            sources.push(source);
         }
     }
 
@@ -319,7 +312,7 @@ fn flag_if_supported_with_fallbacks(build: &mut cc::Build, flags: &[&str]) {
 fn prefer_clang(build: &mut cc::Build) {
     // We prefer clang, because that way it's all LLVM through and through,
     // which helps with performance.
-    if !env::var("CARGO_FEATURE_PREFER_CLANG").is_ok() {
+    if env::var("CARGO_FEATURE_PREFER_CLANG").is_err() {
         return;
     }
 
@@ -341,7 +334,7 @@ fn prefer_clang(build: &mut cc::Build) {
 
 fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(), Box<dyn std::error::Error>> {
     // Only add ASM files if enabled
-    if !env::var("CARGO_FEATURE_ENABLE_ASM").is_ok() || !build_info.supports_decompression_acceleration() {
+    if env::var("CARGO_FEATURE_ENABLE_ASM").is_err() || !build_info.supports_decompression_acceleration() {
         return Ok(());
     }
 
@@ -383,7 +376,7 @@ fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(),
 
         // Add each object file to the build
         for obj in objects {
-            build.object(format!("{}/{}.o", obj_dir, obj));
+            build.object(format!("{obj_dir}/{obj}.o"));
         }
     }
 
@@ -420,9 +413,9 @@ fn generate_bindings(defines: &HashMap<&'static str, Define>) -> Result<String, 
     // Apply defines to bindgen
     for (name, define) in defines {
         let arg = if let Some(value) = &define.value {
-            format!("-D{}={}", name, value)
+            format!("-D{name}={value}")
         } else {
-            format!("-D{}", name)
+            format!("-D{name}")
         };
         bindgen = bindgen.clang_arg(&arg);
     }
@@ -502,15 +495,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             for (name, define) in category_defines {
                 let status = if define.default { "default" } else { "optional" };
                 let value_str = define.value.as_ref()
-                    .map(|v| format!("={}", v))
+                    .map(|v| format!("={v}"))
                     .unwrap_or_default();
+                let enabled = if defines.contains_key(name) { "enabled" } else { "disabled" };
                 println!(
-                    "cargo:warning={}{} [{}] - {} ({})",
-                    name,
-                    value_str,
-                    status,
-                    define.comment,
-                    if defines.contains_key(name) { "enabled" } else { "disabled" }
+                    "cargo:warning={name}{value_str} [{status}] - {comment} ({enabled})",
+                    comment = define.comment,
                 );
             }
         }
