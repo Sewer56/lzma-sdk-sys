@@ -49,7 +49,7 @@ test-build-size = [] # for testing build sizes in code, and LTO
 libc = "0.2"
 
 [dev-dependencies]
-criterion = "0.5"
+criterion = "0.7"
 
 [build-dependencies]
 bindgen = "0.72.0"
