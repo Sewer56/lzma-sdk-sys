@@ -1,8 +1,8 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion, BenchmarkId, Throughput};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion, Throughput};
 use lzma_sdk_sys::{Allocator, CLzmaEncProps, ELzmaFinishMode, ELzmaStatus, LZMA_PROPS_SIZE};
-use lzma_sdk_sys::{LzmaEnc_Create, LzmaEnc_Destroy, LzmaEnc_SetProps, LzmaEncProps_Init};
-use lzma_sdk_sys::{LzmaDecode, LzmaEncode, SZ_OK, SizeT, Byte};
-use std::{fs, ptr};
+use lzma_sdk_sys::{Byte, LzmaDecode, LzmaEncode, SizeT, SZ_OK};
+use lzma_sdk_sys::{LzmaEncProps_Init, LzmaEnc_Create, LzmaEnc_Destroy, LzmaEnc_SetProps};
+use std::{fs, hint::black_box, ptr};
 
 fn compress_data(input: &[u8]) -> (Vec<u8>, Vec<u8>) {
     let mut props = vec![0u8; LZMA_PROPS_SIZE as usize];
@@ -17,12 +17,12 @@ fn compress_data(input: &[u8]) -> (Vec<u8>, Vec<u8>) {
 
         let mut enc_props = CLzmaEncProps::default();
         LzmaEncProps_Init(&mut enc_props);
-        
+
         // Set maximum compression level (9)
         enc_props.level = 9;
         // Use maximum dictionary size for best compression
         enc_props.dictSize = 1 << 24; // 16MB dictionary
-        // Use more fast bytes for better compression
+                                      // Use more fast bytes for better compression
         enc_props.fb = 273;
         // Use maximum search depth
         enc_props.mc = 1 << 30;
@@ -82,52 +82,64 @@ fn decompress_data(compressed: &[u8], props: &[u8], original_size: usize) -> Vec
 
 fn bench_compression(c: &mut Criterion) {
     let mut group = c.benchmark_group("lzma");
-    
+
     // Read the COPYING file
     let input = fs::read("7z/COPYING").expect("Failed to read COPYING file");
     let size = input.len();
-    
+
     // Set throughput for MB/s calculation
     group.throughput(Throughput::Bytes(size as u64));
-    
-    println!("File size: {} bytes ({:.2} MB)", size, size as f64 / (1024.0 * 1024.0));
-    
+
+    println!(
+        "File size: {} bytes ({:.2} MB)",
+        size,
+        size as f64 / (1024.0 * 1024.0)
+    );
+
     group.bench_with_input(BenchmarkId::new("compress", size), &input, |b, input| {
         b.iter(|| {
             let (compressed, _) = compress_data(black_box(input));
             black_box(compressed)
         })
     });
-    
+
     group.finish();
 }
 
 fn bench_decompression(c: &mut Criterion) {
     let mut group = c.benchmark_group("lzma");
-    
+
     // Read and pre-compress the COPYING file
     let input = fs::read("7z/COPYING").expect("Failed to read COPYING file");
     let size = input.len();
     let (compressed, props) = compress_data(&input);
-    
+
     // Set throughput for MB/s calculation
     group.throughput(Throughput::Bytes(size as u64));
-    
-    println!("Original size: {} bytes ({:.2} MB)", size, size as f64 / (1024.0 * 1024.0));
-    println!("Compressed size: {} bytes ({:.2} MB)", compressed.len(), compressed.len() as f64 / (1024.0 * 1024.0));
-    println!("Compression ratio: {:.2}%", (compressed.len() as f64 / size as f64) * 100.0);
-    
+
+    println!(
+        "Original size: {} bytes ({:.2} MB)",
+        size,
+        size as f64 / (1024.0 * 1024.0)
+    );
+    println!(
+        "Compressed size: {} bytes ({:.2} MB)",
+        compressed.len(),
+        compressed.len() as f64 / (1024.0 * 1024.0)
+    );
+    println!(
+        "Compression ratio: {:.2}%",
+        (compressed.len() as f64 / size as f64) * 100.0
+    );
+
     group.bench_with_input(BenchmarkId::new("decompress", size), &size, |b, &size| {
         b.iter(|| {
-            let decompressed = decompress_data(
-                black_box(&compressed),
-                black_box(&props),
-                black_box(size)
-            );
+            let decompressed =
+                decompress_data(black_box(&compressed), black_box(&props), black_box(size));
             black_box(decompressed)
         })
     });
-    
+
     group.finish();
 }
 

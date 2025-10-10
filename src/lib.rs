@@ -61,7 +61,9 @@ pub unsafe extern "C" fn LzmaDecode_Out(
     status: *mut ELzmaStatus,
     alloc: ISzAllocPtr,
 ) -> SRes {
-    LzmaDecode(dest, destLen, src, srcLen, propData, propSize, finishMode, status, alloc)
+    LzmaDecode(
+        dest, destLen, src, srcLen, propData, propSize, finishMode, status, alloc,
+    )
 }
 
 #[cfg(feature = "test-build-size")]
@@ -78,36 +80,47 @@ pub unsafe extern "C" fn LzmaEncode_Out(
     progress: ICompressProgressPtr,
     alloc: ISzAllocPtr,
     allocBig: ISzAllocPtr,
-) -> SRes
-{
-    LzmaEncode(dest, destLen, src, srcLen, props, propsEncoded, propsSize, writeEndMark, progress, alloc, allocBig)
+) -> SRes {
+    LzmaEncode(
+        dest,
+        destLen,
+        src,
+        srcLen,
+        props,
+        propsEncoded,
+        propsSize,
+        writeEndMark,
+        progress,
+        alloc,
+        allocBig,
+    )
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::ptr;
     use alloc::vec;
+    use std::ptr;
 
     #[test]
     fn test_lzma_round_trip() {
         let input = b"Hello LZMA compression!";
         let mut props = [0u8; LZMA_PROPS_SIZE as usize];
         let mut props_size = LZMA_PROPS_SIZE as SizeT;
-        
+
         // Encode
         let mut compressed = vec![0u8; input.len() * 2];
         let mut compressed_size = compressed.len() as SizeT;
-        
+
         let alloc = Allocator::default();
-        
+
         unsafe {
             let enc = LzmaEnc_Create(alloc.as_ref() as *const _);
             assert!(!enc.is_null());
-            
+
             let mut enc_props = CLzmaEncProps::default();
             LzmaEncProps_Init(&mut enc_props);
-            
+
             let res = LzmaEnc_SetProps(enc, &enc_props);
             assert_eq!(res, SZ_OK as i32);
 
@@ -125,7 +138,7 @@ mod tests {
                 alloc.as_ref(),
             );
             assert_eq!(res, SZ_OK as i32);
-            
+
             LzmaEnc_Destroy(enc, alloc.as_ref(), alloc.as_ref());
 
             // Trim compressed buffer to actual size
