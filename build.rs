@@ -1,7 +1,12 @@
-use std::{collections::{HashMap, HashSet}, env, fs, path::{Path, PathBuf}, process::Command};
 #[allow(deprecated)] // doing the suggestion
 use bindgen::CargoCallbacks;
 use regex::Regex;
+use std::{
+    collections::{HashMap, HashSet},
+    env, fs,
+    path::{Path, PathBuf},
+    process::Command,
+};
 
 #[cfg(feature = "debug-build-script")]
 use core::time::Duration;
@@ -56,76 +61,103 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
     // ----------------------
     // Z7_ST is controlled by the 'st' feature flag - multithreaded by default
     if env::var("CARGO_FEATURE_ST").is_ok() {
-        defines.insert("Z7_ST", Define {
-            value: None,
-            comment: "Single-threaded mode".into(),
-            default: false,
-            category: "Threading",
-        });
+        defines.insert(
+            "Z7_ST",
+            Define {
+                value: None,
+                comment: "Single-threaded mode".into(),
+                default: false,
+                category: "Threading",
+            },
+        );
     }
 
     // Core/Required Defines (always enabled)
     // -------------------------------------
-    defines.insert("_REENTRANT", Define {
-        value: None,
-        comment: "Thread-safe libc".into(),
-        default: true,
-        category: "Core",
-    });
-    defines.insert("_FILE_OFFSET_BITS", Define {
-        value: Some("64".into()),
-        comment: "Large file support".into(),
-        default: true,
-        category: "Core",
-    });
-    defines.insert("_LARGEFILE_SOURCE", Define {
-        value: None,
-        comment: "Large file support".into(),
-        default: true,
-        category: "Core",
-    });
-    if env::var("CARGO_FEATURE_EXTERNAL_CODECS").is_ok() {
-        defines.insert("Z7_EXTERNAL_CODECS", Define {
+    defines.insert(
+        "_REENTRANT",
+        Define {
             value: None,
-            comment: "Support external codecs".into(),
+            comment: "Thread-safe libc".into(),
             default: true,
             category: "Core",
-        });
+        },
+    );
+    defines.insert(
+        "_FILE_OFFSET_BITS",
+        Define {
+            value: Some("64".into()),
+            comment: "Large file support".into(),
+            default: true,
+            category: "Core",
+        },
+    );
+    defines.insert(
+        "_LARGEFILE_SOURCE",
+        Define {
+            value: None,
+            comment: "Large file support".into(),
+            default: true,
+            category: "Core",
+        },
+    );
+    if env::var("CARGO_FEATURE_EXTERNAL_CODECS").is_ok() {
+        defines.insert(
+            "Z7_EXTERNAL_CODECS",
+            Define {
+                value: None,
+                comment: "Support external codecs".into(),
+                default: true,
+                category: "Core",
+            },
+        );
     }
 
     // Unicode Support (always enabled)
     // ------------------------------
-    defines.insert("UNICODE", Define {
-        value: None,
-        comment: "Unicode support".into(),
-        default: true,
-        category: "Unicode",
-    });
-    defines.insert("_UNICODE", Define {
-        value: None,
-        comment: "Unicode support (Windows)".into(),
-        default: true,
-        category: "Unicode",
-    });
+    defines.insert(
+        "UNICODE",
+        Define {
+            value: None,
+            comment: "Unicode support".into(),
+            default: true,
+            category: "Unicode",
+        },
+    );
+    defines.insert(
+        "_UNICODE",
+        Define {
+            value: None,
+            comment: "Unicode support (Windows)".into(),
+            default: true,
+            category: "Unicode",
+        },
+    );
 
     // Optional Features (controlled by Cargo features)
     // ---------------------------------------------
     if env::var("CARGO_FEATURE_LARGE_PAGES").is_ok() {
-        defines.insert("Z7_LARGE_PAGES", Define {
-            value: None,
-            comment: "Large pages support".into(),
-            default: false,
-            category: "Performance",
-        });
+        defines.insert(
+            "Z7_LARGE_PAGES",
+            Define {
+                value: None,
+                comment: "Large pages support".into(),
+                default: false,
+                category: "Performance",
+            },
+        );
     }
 
     if env::var("CARGO_FEATURE_LONG_PATHS").is_ok() {
-        defines.insert("Z7_LONG_PATH", Define {
-            value: None,
-            comment: "Long path support".into(),
-            default: false,
-            category: "FileSystem",
-        });
+        defines.insert(
+            "Z7_LONG_PATH",
+            Define {
+                value: None,
+                comment: "Long path support".into(),
+                default: false,
+                category: "FileSystem",
+            },
+        );
     }
 
     // Use Hand Written Assembly Routines for Performance
@@ -136,7 +168,7 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
     // var_clang_arm64.mak: USE_ASM=1 USE_CLANG=1
     // var_clang.mak (other platforms): USE_ASM= (undefined) USE_CLANG=1
     // etc.
-    
+
     // For Rust, we're powered by LLVM, so clang.
     // Only exception is Apple macOS x64, that doesn't use USE_ASM.
     let is_x64 = info.is_x64;
@@ -147,23 +179,29 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
     // Those prefixed with MAKEFILE are the makefile variables.
     // Not used in compilation, but used to keep accuracy with upstream when verifying.
     if info.is_clang {
-        defines.insert("MAKEFILE_USE_CLANG", Define {
-            value: Some("1".to_owned()),
-            comment: "Whether current compiler is Clang".into(),
-            default: true,
-            category: "Build",
-        });
+        defines.insert(
+            "MAKEFILE_USE_CLANG",
+            Define {
+                value: Some("1".to_owned()),
+                comment: "Whether current compiler is Clang".into(),
+                default: true,
+                category: "Build",
+            },
+        );
     }
 
     if (is_x64 || is_x86 || is_arm64) && env::var("CARGO_FEATURE_ENABLE_ASM").is_ok() {
-        // All x86/x64/arm64 except Apple x64 
+        // All x86/x64/arm64 except Apple x64
         if !(is_macos && is_x64) {
-            defines.insert("MAKEFILE_USE_ASM", Define {
-                value: Some("1".to_owned()),
-                comment: "Enable assembly optimizations".into(),
-                default: true,
-                category: "Performance",
-            });
+            defines.insert(
+                "MAKEFILE_USE_ASM",
+                Define {
+                    value: Some("1".to_owned()),
+                    comment: "Enable assembly optimizations".into(),
+                    default: true,
+                    category: "Performance",
+                },
+            );
 
             /*
                 // Original Makefile.
@@ -189,45 +227,60 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
                 endif
             */
             if info.supports_decompression_acceleration() {
-                defines.insert("Z7_LZMA_DEC_OPT", Define {
-                    value: Some("1".to_owned()),
-                    comment: "Enable assembly optimizations".into(),
-                    default: true,
-                    category: "Performance",
-                });
+                defines.insert(
+                    "Z7_LZMA_DEC_OPT",
+                    Define {
+                        value: Some("1".to_owned()),
+                        comment: "Enable assembly optimizations".into(),
+                        default: true,
+                        category: "Performance",
+                    },
+                );
                 // Rust Note: We link `LzmaDec.c` via the header `LzmaDec.h` in `wrapper.h`
                 // So we need to set this define if enabling the feature.
             }
-        } 
+        }
     }
 
     if is_x64 {
-        defines.insert("MAKEFILE_IS_X64", Define {
-            value: Some("1".to_owned()),
-            comment: "x64 platform".into(),
-            default: true,
-            category: "Architecture",
-        });
+        defines.insert(
+            "MAKEFILE_IS_X64",
+            Define {
+                value: Some("1".to_owned()),
+                comment: "x64 platform".into(),
+                default: true,
+                category: "Architecture",
+            },
+        );
     } else if is_x86 {
-        defines.insert("MAKEFILE_IS_X86", Define {
-            value: Some("1".to_owned()),
-            comment: "x86 platform".into(),
-            default: true,
-            category: "Architecture",
-        });
+        defines.insert(
+            "MAKEFILE_IS_X86",
+            Define {
+                value: Some("1".to_owned()),
+                comment: "x86 platform".into(),
+                default: true,
+                category: "Architecture",
+            },
+        );
     } else if is_arm64 {
-        defines.insert("MAKEFILE_IS_ARM64", Define {
-            value: Some("1".to_owned()),
-            comment: "ARM64 platform".into(),
-            default: true,
-            category: "Architecture",
-        });
-        defines.insert("MAKEFILE_ASM_FLAGS", Define {
-            value: Some("-Wno-unused-macros".to_owned()),
-            comment: "Flags related to Hand Written Assembly".into(),
-            default: true,
-            category: "Architecture",
-        });
+        defines.insert(
+            "MAKEFILE_IS_ARM64",
+            Define {
+                value: Some("1".to_owned()),
+                comment: "ARM64 platform".into(),
+                default: true,
+                category: "Architecture",
+            },
+        );
+        defines.insert(
+            "MAKEFILE_ASM_FLAGS",
+            Define {
+                value: Some("-Wno-unused-macros".to_owned()),
+                comment: "Flags related to Hand Written Assembly".into(),
+                default: true,
+                category: "Architecture",
+            },
+        );
     }
 
     defines
@@ -237,10 +290,10 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
 ///
 /// This function scans a given wrapper file for `#include` directives that reference
 /// files in the "7z/C/" directory and builds a list of corresponding source files:
-/// 
+///
 /// - For `.h` includes: looks for matching `.c` implementation files
 /// - For `.c` includes: adds them directly to the source list
-/// 
+///
 /// All paths are verified to exist before being included in the result.
 ///
 /// # Arguments
@@ -249,14 +302,16 @@ fn get_defines(info: &PlatformInfo) -> HashMap<&'static str, Define> {
 /// # Returns
 /// * `Result<Vec<String>>` - A vector of existing source file paths on success
 ///   or an error if file reading or regex compilation fails
-fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box<dyn std::error::Error>> {
+fn get_source_files_from_includes(
+    wrapper_path: &str,
+) -> Result<Vec<String>, Box<dyn std::error::Error>> {
     let content = fs::read_to_string(wrapper_path)?;
     let include_re = Regex::new(r#"#include\s+"7z/C/([^"]+)\.(h|c)""#)?;
     let mut sources = HashSet::new();
-    
+
     for cap in include_re.captures_iter(&content) {
         let file_name = cap.get(1).unwrap().as_str();
-        
+
         // For both .h and .c includes, look for the corresponding .c file
         let source = format!("7z/C/{file_name}.c");
         if Path::new(&source).exists() {
@@ -292,13 +347,12 @@ fn get_source_files_from_includes(wrapper_path: &str) -> Result<Vec<String>, Box
             $(CC) $(CFLAGS) $<
         endif
     */
-    
+
     Ok(sources.into_iter().collect())
 }
 
 /// This function would find the first flag in `flags` that is supported
 /// and add that to `build`.
-#[allow(dead_code)]
 fn flag_if_supported_with_fallbacks(build: &mut cc::Build, flags: &[&str]) {
     let option = flags
         .iter()
@@ -325,16 +379,18 @@ fn prefer_clang(build: &mut cc::Build) {
     if env::var("CARGO_FEATURE_FAT_LTO").is_ok() {
         build.flag_if_supported("-flto");
     } else if env::var("CARGO_FEATURE_THIN_LTO").is_ok() {
-        flag_if_supported_with_fallbacks(
-            build,
-            &["-flto=thin", "-flto"],
-        );
+        flag_if_supported_with_fallbacks(build, &["-flto=thin", "-flto"]);
     }
 }
 
-fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(), Box<dyn std::error::Error>> {
+fn add_asm_files(
+    build: &mut cc::Build,
+    build_info: &PlatformInfo,
+) -> Result<(), Box<dyn std::error::Error>> {
     // Only add ASM files if enabled
-    if env::var("CARGO_FEATURE_ENABLE_ASM").is_err() || !build_info.supports_decompression_acceleration() {
+    if env::var("CARGO_FEATURE_ENABLE_ASM").is_err()
+        || !build_info.supports_decompression_acceleration()
+    {
         return Ok(());
     }
 
@@ -346,28 +402,29 @@ fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(),
     } else if build_info.is_x64 || build_info.is_x86 {
         // Get the right directory for precompiled objects
         let obj_dir = if build_info.is_windows {
-            if build_info.is_x64 { "precompiled-asm/x86/win-x64" }
-            else { "precompiled-asm/x86/win-x86" }
+            if build_info.is_x64 {
+                "precompiled-asm/x86/win-x64"
+            } else {
+                "precompiled-asm/x86/win-x86"
+            }
         } else if build_info.is_macos {
-            if build_info.is_x64 { "precompiled-asm/x86/apple-x64" }
-            else { 
+            if build_info.is_x64 {
+                "precompiled-asm/x86/apple-x64"
+            } else {
                 println!("cargo:warning='enable-asm' feature is not supported for this macOS architecture");
                 panic!("'enable-asm' feature is not supported for this macOS architecture")
             }
-        }
-        else { // ELF. Unixes. Including Apple, Android, etc.
-            if build_info.is_x64 { "precompiled-asm/x86/linux-x64" }
-            else { "precompiled-asm/x86/linux-x86" }
+        } else {
+            // ELF. Unixes. Including Apple, Android, etc.
+            if build_info.is_x64 {
+                "precompiled-asm/x86/linux-x64"
+            } else {
+                "precompiled-asm/x86/linux-x86"
+            }
         };
 
         // List all object files
-        let mut objects = vec![
-            "7zCrcOpt",
-            "XzCrc64Opt", 
-            "AesOpt",
-            "Sha1Opt",
-            "Sha256Opt",
-        ];
+        let mut objects = vec!["7zCrcOpt", "XzCrc64Opt", "AesOpt", "Sha1Opt", "Sha256Opt"];
 
         // LzmaDecOpt is 64-bit only
         if build_info.is_x64 {
@@ -383,7 +440,9 @@ fn add_asm_files(build: &mut cc::Build, build_info: &PlatformInfo) -> Result<(),
     Ok(())
 }
 
-fn generate_bindings(defines: &HashMap<&'static str, Define>) -> Result<String, Box<dyn std::error::Error>> {
+fn generate_bindings(
+    defines: &HashMap<&'static str, Define>,
+) -> Result<String, Box<dyn std::error::Error>> {
     // Configure and generate bindings
     let mut bindgen = bindgen::Builder::default()
         .header("wrapper.h")
@@ -428,10 +487,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Windows devs may need a different solution, but this works for Linux & macOS
     // Also uncomment [profile.dev.build-override] in Cargo.toml
 
-    #[cfg(feature = "debug-build-script")] {
-      let url = format!("vscode://vadimcn.vscode-lldb/launch/config?{{'request':'attach','pid':{}}}", std::process::id());
-      Command::new("code").arg("--open-url").arg(url).output().unwrap();
-      sleep(Duration::from_secs(1)); // Wait for debugger to attach
+    #[cfg(feature = "debug-build-script")]
+    {
+        let url = format!(
+            "vscode://vadimcn.vscode-lldb/launch/config?{{'request':'attach','pid':{}}}",
+            std::process::id()
+        );
+        Command::new("code")
+            .arg("--open-url")
+            .arg(url)
+            .output()
+            .unwrap();
+        sleep(Duration::from_secs(1)); // Wait for debugger to attach
     }
 
     let mut build = cc::Build::new();
@@ -445,10 +512,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         build.define(name, define.value.as_deref());
     }
 
-    // Base compilation flags 
-    build
-        .files(source_files)
-        .include("7z/C");
+    // Base compilation flags
+    build.files(source_files).include("7z/C");
 
     // Link assembly files if enabled
     add_asm_files(&mut build, &platform_info)?;
@@ -460,10 +525,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     if env::var("CARGO_FEATURE_GENERATE_BINDINGS").is_ok() {
         let bindings = generate_bindings(&defines)?;
         let out_dir = PathBuf::from(env::var("OUT_DIR")?);
-        
+
         // Write to OUT_DIR for compilation
         fs::write(out_dir.join("bindings.rs"), &bindings)?;
-        
+
         // Also save to src for version control
         fs::write("src/bindings.rs", &bindings)?;
     }
@@ -473,51 +538,74 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     {
         println!("cargo:warning=7-Zip Build Configuration:");
         println!("cargo:warning=========================");
-        
+
         // Get all unique categories
-        let mut categories: Vec<_> = defines.values()
+        let mut categories: Vec<_> = defines
+            .values()
             .map(|d| d.category)
             .collect::<std::collections::HashSet<_>>()
             .into_iter()
             .collect();
         categories.sort();
-    
+
         // Print defines by category
         for category in categories {
             println!("cargo:warning=");
             println!("cargo:warning={} Defines:", category);
             println!("cargo:warning={}", "-".repeat(category.len() + 8));
-            
-            let category_defines: Vec<_> = defines.iter()
+
+            let category_defines: Vec<_> = defines
+                .iter()
                 .filter(|(_, d)| d.category == category)
                 .collect();
-                
+
             for (name, define) in category_defines {
-                let status = if define.default { "default" } else { "optional" };
-                let value_str = define.value.as_ref()
+                let status = if define.default {
+                    "default"
+                } else {
+                    "optional"
+                };
+                let value_str = define
+                    .value
+                    .as_ref()
                     .map(|v| format!("={v}"))
                     .unwrap_or_default();
-                let enabled = if defines.contains_key(name) { "enabled" } else { "disabled" };
+                let enabled = if defines.contains_key(name) {
+                    "enabled"
+                } else {
+                    "disabled"
+                };
                 println!(
                     "cargo:warning={name}{value_str} [{status}] - {comment} ({enabled})",
                     comment = define.comment,
                 );
             }
         }
-    
+
         println!("cargo:warning=");
         println!("cargo:warning=Platform Configuration:");
         println!("cargo:warning======================");
-        println!("cargo:warning=Target Architecture: {}", 
-            if platform_info.is_x64 { "x86_64" }
-            else if platform_info.is_x86 { "x86" }
-            else if platform_info.is_arm64 { "arm64" }
-            else { "unknown" }
+        println!(
+            "cargo:warning=Target Architecture: {}",
+            if platform_info.is_x64 {
+                "x86_64"
+            } else if platform_info.is_x86 {
+                "x86"
+            } else if platform_info.is_arm64 {
+                "arm64"
+            } else {
+                "unknown"
+            }
         );
-        println!("cargo:warning=Target OS: {}", 
-            if platform_info.is_windows { "Windows" }
-            else if platform_info.is_macos { "macOS" }
-            else { "Unix/Linux" }
+        println!(
+            "cargo:warning=Target OS: {}",
+            if platform_info.is_windows {
+                "Windows"
+            } else if platform_info.is_macos {
+                "macOS"
+            } else {
+                "Unix/Linux"
+            }
         );
     }
 
