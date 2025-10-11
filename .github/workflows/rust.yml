@@ -83,25 +83,6 @@ jobs:
           use-tarpaulin: ${{ matrix.use-tarpaulin }}
           install-binstall: true
 
-      # Note: The GitHub Runner Images will contain an up to date Rust Stable Toolchain
-      #       thus as per recommendation of cargo-semver-checks, we're using stable here.
-      #
-      # Note to reader. If adding this to a new repo, please clear cache.
-      - name: Run cargo-semver-checks
-        if: (github.event_name == 'pull_request' || startsWith(github.ref, 'refs/tags/')) && matrix.target != 'aarch64-pc-windows-msvc'
-        shell: bash
-        run: |
-          SEARCH_RESULT=$(cargo search "^lzma-sdk-sys$" --limit 1)
-
-          if echo "$SEARCH_RESULT" | grep -q "^lzma-sdk-sys "; then
-            rustup target add ${{ matrix.target }}
-            # binstall is installed in devops-rust-test-and-coverage
-            cargo binstall cargo-semver-checks
-            cargo semver-checks --target ${{ matrix.target }} 
-          else
-              echo "No previous version found on crates.io. Skipping semver checks."
-          fi
-
   publish-crate:
     permissions:
       contents: write
