@@ -39,12 +39,12 @@ uasm -elf -DABI_LINUX -DABI_CDECL Sha256Opt.asm
 ## Windows x64 (64-bit)
 
 ```bash
-uasm -win64 -DABI_LINUX 7zCrcOpt.asm
-uasm -win64 -DABI_LINUX XzCrc64Opt.asm
-uasm -win64 -DABI_LINUX AesOpt.asm
-uasm -win64 -DABI_LINUX Sha1Opt.asm
-uasm -win64 -DABI_LINUX Sha256Opt.asm
-uasm -win64 -DABI_LINUX LzmaDecOpt.asm
+uasm -win64 7zCrcOpt.asm
+uasm -win64 XzCrc64Opt.asm
+uasm -win64 AesOpt.asm
+uasm -win64 Sha1Opt.asm
+uasm -win64 Sha256Opt.asm
+uasm -win64 LzmaDecOpt.asm
 ```
 
 ## Windows x86 (32-bit)
