@@ -467,7 +467,8 @@ fn generate_bindings(
             non_exhaustive: false,
         })
         .bitfield_enum(".*_FLAGS")
-        .rustified_enum(".*");
+        .rustified_enum(".*")
+        .raw_line("#![allow(warnings)]");
 
     // Apply defines to bindgen
     for (name, define) in defines {
