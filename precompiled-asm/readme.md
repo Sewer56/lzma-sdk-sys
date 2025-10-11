@@ -8,7 +8,7 @@ assembly routines, rather than the C versions.
 
 ## Last Update Info
 
-Last update: 24.09
+Last update: 25.01
 The commands below require [uasm] and have been derived from reading `7zip_gcc_c.mak`.
 
 # Building 7-Zip Assembly Files with UASM
